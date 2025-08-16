@@ -28,7 +28,7 @@
 ## 下载
 
 您可以从以下地址获取最新版本的插件：
-[最新版本下载](https://github.com/cpuwolf/Quickmadedevice/releases)
+[最新版本下载](https://gitee.com/cpuwolf/Quickmadedevice/releases)
 
 ## 安装程序
 
@@ -69,7 +69,7 @@ KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", GROUP="input"
 
 ## 截图
 
-<img width="354" alt="插件截图1" src="https://github.com/cpuwolf/Quickmadedevice/assets/1320329/d13b6540-eba4-422a-98b9-1ef75fbf7c59">
+<img width="354" alt="插件截图1" src="https://gitee.com/cpuwolf/Quickmadedevice/assets/1320329/d13b6540-eba4-422a-98b9-1ef75fbf7c59">
 
 ![插件设置界面](img/qmdev_setup.jpg)![零性能影响](img/nocost.jpg)
 
@@ -108,8 +108,8 @@ KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", GROUP="input"
 ### **如何编写您自己的 .lua 脚本文件**
 
 我们欢迎您为自己喜欢的机模编写脚本！详细的开发者文档请参考我们的 Wiki：
-[Qmdev .lua 文件编写指南](https://github.com/cpuwolf/Quickmadedevice/wiki/Qmdev-.lua-files)
+[Qmdev .lua 文件编写指南](https://gitee.com/cpuwolf/Quickmadedevice/wiki/Qmdev-.lua-files)
 
 ### **更多Lua开发者文档**
 
-[访问开发者文档中心](https://github.com/cpuwolf/Quickmadedevice/wiki)
+[访问开发者文档中心](https://gitee.com/cpuwolf/Quickmadedevice/wiki)
