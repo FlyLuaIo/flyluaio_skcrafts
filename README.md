@@ -1,7 +1,7 @@
 
-# 奎克质造设备插件 (Quickmadedevice)
+# 奎克质造设备插件 (Qmdev)
 
-这是为 X-Plane 11/12、MSFS 2020/2024 设计的奎克质造 (QuickmadeSim) 设备USB驱动插件。
+这是为 X-Plane 11/12、MSFS 2020/2024 设计的奎克质造 (QuickmadeSim) 设备USB驱动软件。
 它拥有强大的扩展性，插件内置了对编程初学者十分友好的 Lua 语言引擎，让您可以轻松为自己的飞机添加支持。
 
 
