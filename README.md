@@ -66,6 +66,10 @@ sudo vim /etc/udev/rules.d/99-joysticks.rules
 KERNEL=="event*", NAME="input/%k", MODE="0666", GROUP="input"
 KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", GROUP="input"
 ```
+重新加载设备规则
+```bash
+sudo udevadm control --reload-rules
+```
 
 #### **Linux 内核贡献**
 我们修复了 Linux 内核对摇杆最大按键数的限制，详情请见：
