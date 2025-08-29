@@ -27,7 +27,7 @@
 ## 游戏兼容性列表
 
 请通过以下链接查看详细的兼容性列表：
-[奎克质造设备游戏兼容性列表](https://docs.qq.com/sheet/DWERFQnRmVUFZeHBi?tab=00...)
+[奎克质造设备游戏兼容性列表](https://docs.qq.com/sheet/DWERFQnRmVUFZeHBi?tab=000001)
 
 ## 下载
 
