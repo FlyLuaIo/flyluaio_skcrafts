@@ -4,7 +4,7 @@ This is the QuickmadeSim device USB driver software designed for X-Plane 11/12 a
 It boasts powerful extensibility, with a built-in Lua language engine that is very friendly to programming beginners, allowing you to easily add support for your own aircraft.
 
 **Official Website and Support:**
-* Cross-platform support (X-Plane 11/12/MSFS2020/2024): https://www.quickmadesim.com/?page_id=194&lang=en
+* Cross-platform support (X-Plane 11/12/MSFS2020/2024): https://x-plane.vip/quickmade/support/
 
 # Features
 
