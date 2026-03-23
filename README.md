@@ -8,6 +8,7 @@
 
 # 硬件支持列表
 - 蜂窝油门Bravo
+- VKBsim Gunfighter MCG Ultimate Twist
 - 奎克质造设备
 
 ## 游戏兼容性列表

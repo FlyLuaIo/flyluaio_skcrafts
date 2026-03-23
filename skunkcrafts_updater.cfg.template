@@ -1,0 +1,7 @@
+zone|custom
+liveries|false
+module|https://gitee.com/cpuwolf/qmdev/raw/release/release
+version|@VERSION@
+disabled|false
+name|qmdev
+locked|false

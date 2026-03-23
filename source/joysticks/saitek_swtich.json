@@ -1,0 +1,43 @@
+{
+  "ProductName": "StkSwitch",
+  "USB_VID": "0x06A3",
+  "USB_PID": "0x0D67",
+  "Functions": [
+    {
+      "FunName": "LED",
+      "USB_FEAT_length": 2,
+      "HeaderBytes": ["0x00"],
+      "FunIndex": 1,
+      "TestBytes": ["0x00", "0x07"],
+      "OffBytes": ["0x00", "0x00"],
+      "LightKey": 7,
+      "LightKeyName": "Geen N",
+      "LightBytes": ["0x00", "0x80"],
+      "SubFunctions": [
+        {
+          "int": "i8:6"
+        }
+      ],
+      "SubBitFunctions": [
+        {
+          "Green_N": "t8"
+        },
+        {
+          "Green_L": "t9"
+        },
+        {
+          "Green_R": "t10"
+        },
+        {
+          "Red_N": "t11"
+        },
+        {
+          "Red_L": "t12"
+        },
+        {
+          "Red_R": "t13"
+        }
+      ]
+    }
+  ]
+}

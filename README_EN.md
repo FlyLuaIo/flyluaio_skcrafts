@@ -5,6 +5,7 @@ It boasts powerful extensibility, with a built-in Lua language engine that is ve
 
 # Hardware
 - Honeycomb Bravo
+- VKBsim Gunfighter MCG Ultimate Twist
 - (to be added)
 - Quickmadesim QGMC710, QMCP737C, QG1K, QFCU, QCDU, QMPE, QMOVH-A, etc.
 
