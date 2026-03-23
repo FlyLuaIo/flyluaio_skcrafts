@@ -21,12 +21,13 @@ Please check the detailed compatibility list via the following link:
 *   **Smooth Aircraft Switching**: Say goodbye to the hassle of searching the entire internet for configuration files.
 *   **Rotary Knob Acceleration**: Optimizes your operational experience.
 *   **Built-in Lua Language Engine**: Simple to use and easy to customize.
-*   **Easy Debugging**: Instantly reload Lua scripts without restarting X-Plane, speeding up the development process.
-*   **Easy Debugging**：Automatically reload Lua scripts when the Lua file is changed, speeding up the debugging process.
+*   **Easy Debugging**：Automatically reload Lua scripts After Editing the Lua file, speeding up the debugging process.
 *   **Aircraft State Synchronization**: Supports cold and dark cockpit state synchronization.
 *   **Simulated Failure Synchronization**: Supports synchronization of simulated aircraft failure states.
 *   **Cross-platform Operation**: Fully supports Windows, Linux, and Mac systems.
 *   **Native Apple ARM Support**: Provides native support for Apple M-series chips.
+*   **JSON defined USB HID**: Add Json, add a USB HID Device
+*   **XP Skunkcrafts Support**: Easy update software small changes
 
 
 
