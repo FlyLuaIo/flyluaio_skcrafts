@@ -14,6 +14,7 @@
 - 翼胜/WinCtrl ECAM
 - VKBsim Gunfighter MCG Ultimate Twist
 - 奎克质造设备
+- 添加中。。。（JSON+Lua即可增加设备）
 
 ## 游戏兼容性列表
 
