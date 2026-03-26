@@ -8,6 +8,10 @@
 
 # 硬件支持列表
 - 蜂窝油门Bravo
+- 赛钛客/罗技 Multi Panel
+- 赛钛客/罗技 Radio Panel
+- 赛钛客/罗技 Switch Panel
+- 翼胜/WinCtrl ECAM
 - VKBsim Gunfighter MCG Ultimate Twist
 - 奎克质造设备
 
