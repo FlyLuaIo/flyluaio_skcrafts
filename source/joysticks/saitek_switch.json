@@ -10,9 +10,9 @@
       "FunIndex": 1,
       "TestBytes": ["0x00", "0x07"],
       "OffBytes": ["0x00", "0x00"],
-      "LightKey": 7,
-      "LightKeyName": "Geen N",
-      "LightBytes": ["0x00", "0x80"],
+      "LightKey": 18,
+      "LightKeyName": "Gear up",
+      "LightBytes": ["0x00", "0x01"],
       "SubFunctions": [
         {
           "int": "i8:6"
@@ -20,22 +20,22 @@
       ],
       "SubBitFunctions": [
         {
-          "Green_N": "t8"
+          "GreenN": "t8"
         },
         {
-          "Green_L": "t9"
+          "GreenL": "t9"
         },
         {
-          "Green_R": "t10"
+          "GreenR": "t10"
         },
         {
-          "Red_N": "t11"
+          "RedN": "t11"
         },
         {
-          "Red_L": "t12"
+          "RedL": "t12"
         },
         {
-          "Red_R": "t13"
+          "RedR": "t13"
         }
       ]
     }
