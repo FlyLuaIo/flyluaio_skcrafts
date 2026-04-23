@@ -1,4 +1,4 @@
-# qmdev plugin for X-Plane
+# flyluaio plugin for X-Plane
 ## core, various modules
 
 Copyright (c) 2018, Wei Shuai <cpuwolf@gmail.com>

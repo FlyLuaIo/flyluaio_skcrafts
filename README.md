@@ -1,7 +1,7 @@
 [中文 ](README.md) | [English](README_EN.md)
 
 
-# USB HID 插件 (Qmdev)
+# USB HID 插件 (FlyLuaIo)
 
 这是为 X-Plane 11/12 设计的USB HID驱动软件。
 它拥有强大的扩展性，插件内置了对编程初学者十分友好的 Lua 语言引擎，让您可以轻松为自己的飞机添加支持。
@@ -11,7 +11,7 @@
 - 赛钛客/罗技 Multi Panel
 - 赛钛客/罗技 Radio Panel
 - 赛钛客/罗技 Switch Panel
-- 翼胜/WinCtrl ECAM
+- 翼胜/WinCtrl AGP
 - VKBsim Gunfighter MCG Ultimate Twist
 - 奎克质造设备
 - 添加中。。。（Json+Lua即可增加设备）
@@ -43,7 +43,7 @@
 ## 下载
 
 您可以从以下地址获取最新版本的插件：
-[最新版本下载](https://gitee.com/cpuwolf/Quickmadedevice/releases)
+[最新版本下载](https://gitee.com/cpuwolf/flyluaio/releases)
 
 ## 安装程序
 
@@ -133,7 +133,7 @@ sudo udevadm control --reload-rules
 ### **如何编写您自己的 .lua 脚本文件**
 
 我们欢迎您为自己喜欢的机模编写脚本！详细的开发者文档请参考我们的 Wiki：
-[Qmdev .lua 文件编写指南](https://gitee.com/cpuwolf/Quickmadedevice/wiki/Qmdev-.lua-files)
+[FlyLuaIo .lua 文件编写指南](https://gitee.com/cpuwolf/Quickmadedevice/wiki/FlyLuaIo-.lua-files)
 
 ### **更多Lua开发者文档**
 

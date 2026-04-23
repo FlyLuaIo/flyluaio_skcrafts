@@ -1,7 +1,7 @@
 zone|custom
 liveries|false
-module|https://gitee.com/cpuwolf/qmdev/raw/release/release
+module|https://gitee.com/cpuwolf/flyluaio/raw/release/release
 version|@VERSION@
 disabled|false
-name|qmdev
+name|flyluaio
 locked|false

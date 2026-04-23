@@ -1,4 +1,4 @@
-# USB HID Device Plugin (Qmdev)
+# USB HID Device Plugin (FlyLuaIo)
 
 This is the USB HID device software designed for X-Plane 11/12 and MSFS 2020/2024.
 It boasts powerful extensibility, with a built-in Lua language engine that is very friendly to programming beginners, allowing you to easily add support for your own aircraft.
@@ -8,7 +8,7 @@ It boasts powerful extensibility, with a built-in Lua language engine that is ve
 - Saitek Multi Panel
 - Saitek Radio Panel
 - Saitek Switch Panel
-- WinWing/WinCtrl ECAM
+- WinWing/WinCtrl AGP
 - VKBsim Gunfighter MCG Ultimate Twist
 - Quickmadesim QGMC710, QMCP737C, QG1K, QFCU, QCDU, QMPE, QMOVH-A
 - Adding ... (Json + Lua is a new USB device) 
@@ -43,7 +43,7 @@ https://github.com/cpuwolf/qmdevscripts
 ## Download
 
 You can get the latest version of the plugin from the following address:
-[Latest Version Download](https://gitee.com/cpuwolf/Quickmadedevice/releases)
+[Latest Version Download](https://gitee.com/cpuwolf/flyluaio/releases)
 
 ## Installer
 
@@ -128,7 +128,7 @@ We fixed the Linux kernel's limitation on the maximum number of joystick buttons
 ### **How to Write Your Own .lua Script Files**
 
 We welcome you to write scripts for your favorite aircraft models! For detailed developer documentation, please refer to our Wiki:
-[Qmdev .lua File Writing Guide](https://gitee.com/cpuwolf/Quickmadedevice/wiki/Qmdev-.lua-files)
+[FlyLuaIo .lua File Writing Guide](https://gitee.com/cpuwolf/Quickmadedevice/wiki/FlyLuaIo-.lua-files)
 
 ### **More Lua Developer Documentation**
 

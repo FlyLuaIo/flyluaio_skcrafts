@@ -4,6 +4,7 @@
 -- *****************************************************************
 local Qmdev = oop.class()
 
+local bit = require("bit")
 -- Initialize Qmdev object fields.
 -- No parameters.
 -- No return value.
@@ -50,7 +51,7 @@ end
 -- @MaxStep: (number, optional) Maximum step value (default 99999)
 -- No return value.
 function Qmdev:CfgEncTypeFull(DataType, DecKey, IncKey, Rpnstr, SlowStep, FastStep, StepMode, MinStep, MaxStep)
-    if math.abs(DecKey - IncKey) ~= 1 or DecKey < 0 or IncKey < 0 then
+    if math.abs(DecKey - IncKey) < 1 or DecKey < 0 or IncKey < 0 then
         error("key id error")
     end
     self:AddKey(DecKey)
@@ -205,6 +206,8 @@ end
 -- No return value.
 function Qmdev:CfgVal(KeyIdx, ValStr, PressInt, ReleaseInt)
     self:AddKey(KeyIdx)
+    PressInt = PressInt == nil and 1 or PressInt
+    ReleaseInt = ReleaseInt == nil and 0 or ReleaseInt
     str = 'DFKEY;' .. tostring(KeyIdx) .. ';'
     str = str .. (PressInt == nil and '' or tostring(PressInt)) .. ';'
     str = str .. (ReleaseInt == nil and '' or tostring(ReleaseInt)) .. ';"' .. ValStr .. '"'
@@ -403,6 +406,20 @@ end
 -- add a menu in GUI
 function Qmdev:AddTogMenu(menuEn, menuCh, globalvarstr)
     uluaAddToggleMenu(self:getClassName() .. ': ' .. menuEn, self:getClassName() .. ': ' .. menuCh, globalvarstr)
+end
+
+function Qmdev:swap16(val)
+    -- 1. Use bit.band to force the double into a 32-bit integer
+    -- and then mask it to just the lowest 16 bits.
+    -- This handles negative doubles and large doubles correctly.
+    local u16  = bit.band(val, 0xFFFF)
+
+    -- 2. Extract and move the bytes
+    local high = bit.rshift(u16, 8)                   -- Move bits 9-16 to 1-8
+    local low  = bit.band(bit.lshift(u16, 8), 0xFFFF) -- Move bits 1-8 to 9-16
+
+    -- 3. Combine them
+    return bit.bor(high, low)
 end
 
 return Qmdev

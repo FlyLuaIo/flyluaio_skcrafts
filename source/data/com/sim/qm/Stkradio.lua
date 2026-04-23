@@ -14,48 +14,48 @@ function Stkradio:init()
 end
 
 function Stkradio:absent(FastTurnsPerSecond)
-	if not uluaFind('cpuwolf/qmdev/StkRadio/Radios/com1act1') then
+	if not uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com1act1') then
 		return true
 	end
-	_G.idr_stkradio_hid_radios_com1act1 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com1act1')
-	_G.idr_stkradio_hid_radios_com1act2 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com1act2')
-	_G.idr_stkradio_hid_radios_com1act3 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com1act3')
-	_G.idr_stkradio_hid_radios_com1act4 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com1act4')
-	_G.idr_stkradio_hid_radios_com1act5 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com1act5')
-	_G.idr_stkradio_hid_radios_com1stb1 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com1stb1')
-	_G.idr_stkradio_hid_radios_com1stb2 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com1stb2')
-	_G.idr_stkradio_hid_radios_com1stb3 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com1stb3')
-	_G.idr_stkradio_hid_radios_com1stb4 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com1stb4')
-	_G.idr_stkradio_hid_radios_com1stb5 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com1stb5')
-	_G.idr_stkradio_hid_radios_com2act1 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com2act1')
-	_G.idr_stkradio_hid_radios_com2act2 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com2act2')
-	_G.idr_stkradio_hid_radios_com2act3 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com2act3')
-	_G.idr_stkradio_hid_radios_com2act4 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com2act4')
-	_G.idr_stkradio_hid_radios_com2act5 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com2act5')
-	_G.idr_stkradio_hid_radios_com2stb1 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com2stb1')
-	_G.idr_stkradio_hid_radios_com2stb2 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com2stb2')
-	_G.idr_stkradio_hid_radios_com2stb3 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com2stb3')
-	_G.idr_stkradio_hid_radios_com2stb4 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com2stb4')
-	_G.idr_stkradio_hid_radios_com2stb5 = uluaFind('cpuwolf/qmdev/StkRadio/Radios/com2stb5')
-	_G.idr_stkradio_hid_invalid = uluaFind('cpuwolf/qmdev/StkRadio/invalid')
-	_G.idr_stkradio_hid_fastkeypersec = uluaFind('cpuwolf/qmdev/StkRadio/fastkeypersec')
+	_G.idr_stkradio_hid_radios_com1act1 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com1act1')
+	_G.idr_stkradio_hid_radios_com1act2 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com1act2')
+	_G.idr_stkradio_hid_radios_com1act3 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com1act3')
+	_G.idr_stkradio_hid_radios_com1act4 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com1act4')
+	_G.idr_stkradio_hid_radios_com1act5 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com1act5')
+	_G.idr_stkradio_hid_radios_com1stb1 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com1stb1')
+	_G.idr_stkradio_hid_radios_com1stb2 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com1stb2')
+	_G.idr_stkradio_hid_radios_com1stb3 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com1stb3')
+	_G.idr_stkradio_hid_radios_com1stb4 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com1stb4')
+	_G.idr_stkradio_hid_radios_com1stb5 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com1stb5')
+	_G.idr_stkradio_hid_radios_com2act1 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com2act1')
+	_G.idr_stkradio_hid_radios_com2act2 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com2act2')
+	_G.idr_stkradio_hid_radios_com2act3 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com2act3')
+	_G.idr_stkradio_hid_radios_com2act4 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com2act4')
+	_G.idr_stkradio_hid_radios_com2act5 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com2act5')
+	_G.idr_stkradio_hid_radios_com2stb1 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com2stb1')
+	_G.idr_stkradio_hid_radios_com2stb2 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com2stb2')
+	_G.idr_stkradio_hid_radios_com2stb3 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com2stb3')
+	_G.idr_stkradio_hid_radios_com2stb4 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com2stb4')
+	_G.idr_stkradio_hid_radios_com2stb5 = uluaFind('cpuwolf/flyluaio/StkRadio/Radios/com2stb5')
+	_G.idr_stkradio_hid_invalid = uluaFind('cpuwolf/flyluaio/StkRadio/invalid')
+	_G.idr_stkradio_hid_fastkeypersec = uluaFind('cpuwolf/flyluaio/StkRadio/fastkeypersec')
 	uluaSet(_G.idr_stkradio_hid_fastkeypersec, FastTurnsPerSecond)
 	-- Mode 1
-	self.dr_mode1_com1 = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[0]')
-	self.dr_mode1_com2 = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[1]')
-	self.dr_mode1_nav1 = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[2]')
-	self.dr_mode1_nav2 = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[3]')
-	self.dr_mode1_adf = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[4]')
-	self.dr_mode1_dme = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[5]')
-	self.dr_mode1_xpdr = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[6]')
+	self.dr_mode1_com1 = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[0]')
+	self.dr_mode1_com2 = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[1]')
+	self.dr_mode1_nav1 = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[2]')
+	self.dr_mode1_nav2 = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[3]')
+	self.dr_mode1_adf = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[4]')
+	self.dr_mode1_dme = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[5]')
+	self.dr_mode1_xpdr = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[6]')
 	-- Mode 2
-	self.dr_mode2_com1 = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[7]')
-	self.dr_mode2_com2 = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[8]')
-	self.dr_mode2_nav1 = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[9]')
-	self.dr_mode2_nav2 = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[10]')
-	self.dr_mode2_adf = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[11]')
-	self.dr_mode2_dme = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[12]')
-	self.dr_mode2_xpdr = iDataRef:New('cpuwolf/qmdev/StkRadio/keysmap[13]')
+	self.dr_mode2_com1 = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[7]')
+	self.dr_mode2_com2 = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[8]')
+	self.dr_mode2_nav1 = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[9]')
+	self.dr_mode2_nav2 = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[10]')
+	self.dr_mode2_adf = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[11]')
+	self.dr_mode2_dme = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[12]')
+	self.dr_mode2_xpdr = iDataRef:New('cpuwolf/flyluaio/StkRadio/keysmap[13]')
 	return false
 end
 
@@ -298,43 +298,43 @@ function Stkradio:loopDigi()
 	end
 
 	if self.dr_com1a:ChangedUpdate() then
-		digi_com1a = self:encRadioDigits(self.dr_com1a:GetOld())
+		self.digi_com1a = self:encRadioDigits(self.dr_com1a:GetOld())
 	end
 	if self.dr_com1s:ChangedUpdate() then
-		digi_com1s = self:encRadioDigits(self.dr_com1s:GetOld())
+		self.digi_com1s = self:encRadioDigits(self.dr_com1s:GetOld())
 	end
 	if self.dr_com2a:ChangedUpdate() then
-		digi_com2a = self:encRadioDigits(self.dr_com2a:GetOld())
+		self.digi_com2a = self:encRadioDigits(self.dr_com2a:GetOld())
 	end
 	if self.dr_com2s:ChangedUpdate() then
-		digi_com2s = self:encRadioDigits(self.dr_com2s:GetOld())
+		self.digi_com2s = self:encRadioDigits(self.dr_com2s:GetOld())
 	end
 	if self.dr_nav1a:ChangedUpdate() then
-		digi_nav1a = self:encRadioDigits(self.dr_nav1a:GetOld())
+		self.digi_nav1a = self:encRadioDigits(self.dr_nav1a:GetOld())
 	end
 	if self.dr_nav1s:ChangedUpdate() then
-		digi_nav1s = self:encRadioDigits(self.dr_nav1s:GetOld())
+		self.digi_nav1s = self:encRadioDigits(self.dr_nav1s:GetOld())
 	end
 	if self.dr_nav2a:ChangedUpdate() then
-		digi_nav2a = self:encRadioDigits(self.dr_nav2a:GetOld())
+		self.digi_nav2a = self:encRadioDigits(self.dr_nav2a:GetOld())
 	end
 	if self.dr_nav2s:ChangedUpdate() then
-		digi_nav2s = self:encRadioDigits(self.dr_nav2s:GetOld())
+		self.digi_nav2s = self:encRadioDigits(self.dr_nav2s:GetOld())
 	end
 	if self.dr_adfa:ChangedUpdate() then
-		digi_adfa = self:encRadioDigits(self.dr_adfa:GetOld())
+		self.digi_adfa = self:encRadioDigits(self.dr_adfa:GetOld())
 	end
 	if self.dr_adfs:ChangedUpdate() then
-		digi_adfs = self:encRadioDigits(self.dr_adfs:GetOld())
+		self.digi_adfs = self:encRadioDigits(self.dr_adfs:GetOld())
 	end
 	if self.dr_dmea:ChangedUpdate() then
-		digi_dmea = self:encFloatDigits(self.dr_dmea:GetOld())
+		self.digi_dmea = self:encFloatDigits(self.dr_dmea:GetOld())
 	end
 	if self.dr_dmes:ChangedUpdate() then
-		digi_dmes = self:encFloatDigits(self.dr_dmes:GetOld())
+		self.digi_dmes = self:encFloatDigits(self.dr_dmes:GetOld())
 	end
 	if self.dr_xpdr:ChangedUpdate() then
-		digi_xpdr = self:encIntDigits(self.dr_xpdr:GetOld())
+		self.digi_xpdr = self:encIntDigits(self.dr_xpdr:GetOld())
 	end
 
 	-- update radio up

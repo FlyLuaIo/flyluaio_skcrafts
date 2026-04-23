@@ -23,28 +23,33 @@ wwagp:GetBkl('sim/cockpit/electrical/cockpit_lights', 250)
 wwagp:GetDigiBkl("sim/cockpit2/switches/avionics_power_on", 200) -- 0~1
 wwagp:GetLedBkl("sim/cockpit2/switches/avionics_power_on", 200)  -- 0~1
 --================================ Input LED/LCD ===
-wwagp:GetUlockL("cpuwolf/qmdev/WwAgp/condbtn[1]")
-wwagp:GetUlockN("cpuwolf/qmdev/WwAgp/condbtn[1]")
-wwagp:GetUlockR("cpuwolf/qmdev/WwAgp/condbtn[1]")
-wwagp:GetBrakeHot('cpuwolf/qmdev/WwAgp/condbtn[1]')
+wwagp:GetUlockL("cpuwolf/flyluaio/WwAgp/condbtn[1]")
+wwagp:GetUlockN("cpuwolf/flyluaio/WwAgp/condbtn[1]")
+wwagp:GetUlockR("cpuwolf/flyluaio/WwAgp/condbtn[1]")
+wwagp:GetBrakeHot('cpuwolf/flyluaio/WwAgp/condbtn[1]')
 wwagp:GetLockL("sim/flightmodel2/gear/deploy_ratio[1]")
 wwagp:GetLockN("sim/flightmodel2/gear/deploy_ratio[0]")
 wwagp:GetLockR("sim/flightmodel2/gear/deploy_ratio[2]")
-wwagp:GetBrakeOn('cpuwolf/qmdev/WwAgp/condbtn[1]')
-wwagp:GetLowD('cpuwolf/qmdev/WwAgp/condbtn[1]')
-wwagp:GetMedD('cpuwolf/qmdev/WwAgp/condbtn[1]')
-wwagp:GetMaxD('cpuwolf/qmdev/WwAgp/condbtn[1]')
-wwagp:GetLow('cpuwolf/qmdev/WwAgp/condbtn[1]')
-wwagp:GetMed('cpuwolf/qmdev/WwAgp/condbtn[1]')
-wwagp:GetMax('cpuwolf/qmdev/WwAgp/condbtn[1]')
-wwagp:GetTerr('cpuwolf/qmdev/WwAgp/condbtn[1]')
-wwagp:GetLever('cpuwolf/qmdev/WwAgp/condbtn[1]')
+wwagp:GetBrakeOn('cpuwolf/flyluaio/WwAgp/condbtn[1]')
+wwagp:GetLowD('cpuwolf/flyluaio/WwAgp/condbtn[1]')
+wwagp:GetMedD('cpuwolf/flyluaio/WwAgp/condbtn[1]')
+wwagp:GetMaxD('cpuwolf/flyluaio/WwAgp/condbtn[1]')
+wwagp:GetLow('cpuwolf/flyluaio/WwAgp/condbtn[1]')
+wwagp:GetMed('cpuwolf/flyluaio/WwAgp/condbtn[1]')
+wwagp:GetMax('cpuwolf/flyluaio/WwAgp/condbtn[1]')
+wwagp:GetTerr('cpuwolf/flyluaio/WwAgp/condbtn[1]')
+wwagp:GetLever('cpuwolf/flyluaio/WwAgp/condbtn[1]')
 
 
 
 --====LCD
-local dr_chrono = iDataRef:New('sim/cockpit2/clock_timer/chrono_time[0]')
-
+local dr_chrono
+if nil == uluaFind("sim/cockpit2/clock_timer/chrono_time[0]") then
+	-- XP11
+	dr_chrono = iDataRef:New('sim/cockpit2/clock_timer/hobbs_time_seconds')
+else
+	dr_chrono = iDataRef:New('sim/cockpit2/clock_timer/chrono_time[0]')
+end
 local dr_utc_days = iDataRef:New('sim/time/local_date_days')
 
 local dr_utc_hr = iDataRef:New('sim/cockpit2/clock_timer/zulu_time_hours')
@@ -54,7 +59,7 @@ local dr_utc_sec = iDataRef:New('sim/cockpit2/clock_timer/zulu_time_seconds')
 local dr_et_hr = iDataRef:New('sim/cockpit2/clock_timer/hobbs_time_hours')
 local dr_et_min = iDataRef:New('sim/cockpit2/clock_timer/hobbs_time_minutes')
 
-local dr_utc_is_date = iDataRef:New('cpuwolf/qmdev/WwAgp/keysmap[14]')
+local dr_utc_is_date = iDataRef:New('cpuwolf/flyluaio/WwAgp/keysmap[14]')
 
 local gChrono = ""
 local utc = ""
