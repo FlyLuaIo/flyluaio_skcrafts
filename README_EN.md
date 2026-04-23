@@ -93,35 +93,6 @@ We fixed the Linux kernel's limitation on the maximum number of joystick buttons
 ![轻松调试](img/menu_reload.png)
 ![零性能影响](img/nocost.jpg)
 
-## Major Version Information
-
-### **V6.3**
-
-*   **Core Changes**:
-    *   Fixed a core bug with incorrect DataRef value readings.
-    *   Updated to X-Plane SDK 4.0.1.
-    *   Fixed a USB log error.
-*   **Lua Script Changes**:
-    *   Added support for the default XP12 A333 for QFCU.
-    *   Updated device logic and functional fixes for various aircraft models (Toliss, IXEG, ZIBO, Flightfactor, JarDesign) under XP12.
-    *   **Note**: This update requires you to simultaneously update your QFCU firmware: [Firmware Update Address](https://www.quickmadesim.com/?page_id=658&lang=en)
-
-### **V6.1**
-*   Added a pop-up prompt when reading Lua files.
-
-### **V6.0**
-*   Added native support for MacOS M1 chip.
-*   Removed all .cfg configuration files; relevant content has been integrated into Lua scripts.
-
-### **V5.0**
-*   Removed reliance on FlyWithLua to resolve its performance overhead issues.
-*   Introduced the built-in ulua engine.
-
-### **V2.0**
-*   Further optimized performance.
-*   Added new keyword `DFKEY` for .cfg files.
-*   Added `disfast` dataref to temporarily disable fast keys.
-*   Added support for QCDU, QG1K devices.
 
 ## For Developers
 

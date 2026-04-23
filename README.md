@@ -93,40 +93,6 @@ sudo udevadm control --reload-rules
 ![轻松调试](img/menu_reload.png)
 ![零性能影响](img/nocost.jpg)
 
-## 重大版本信息
-
-### **V7.3**
-
-*   **核心变更**:
-    *   增加用蜂窝油门的json文件，增加对设备动态支持的可能
-
-### **V6.3**
-
-*   **核心变更**:
-    *   修复了读取DataRef数值错误的核心bug。
-    *   更新至 X-Plane SDK 4.0.1。
-    *   修复了一个USB日志错误。
-*   **Lua脚本变更**:
-    *   为 QFCU 添加了对默认 XP12 A333 的支持。
-    *   更新了多款机模（Toliss, IXEG, ZIBO, Flightfactor, JarDesign）在XP12下的设备逻辑和功能修复。
-    *   **注意**: 此更新需要您同步更新 QFCU 固件: [固件更新地址](https://www.quickmadesim.com/?page_id=658&lang=en)
-
-### **V6.1**
-*   增加了读取Lua文件时的弹出窗口提示。
-
-### **V6.0**
-*   增加了对 MacOS M1 芯片的原生支持。
-*   移除了所有 .cfg 配置文件，相关内容已整合进 Lua 脚本。
-
-### **V5.0**
-*   移除了对 FlyWithLua 的依赖，以解决其带来的性能损耗问题。
-*   引入了内置的 ulua 引擎。
-
-### **V2.0**
-*   进一步优化性能。
-*   为 .cfg 文件添加了新的关键字 `DFKEY`。
-*   增加了 `disfast` dataref，用于临时禁用快速按键。
-*   增加了对 QCDU, QG1K 设备的支持。
 
 ## 面向开发者
 
