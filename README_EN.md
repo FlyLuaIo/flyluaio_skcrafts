@@ -38,7 +38,7 @@ Please check the detailed compatibility list via the following link:
 
 ## Contribute to Scripts
 
-https://github.com/cpuwolf/flyluaioscripts
+https://github.com/FlyLuaIo/flyluaioscripts
 
 ## Download
 
