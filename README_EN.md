@@ -38,7 +38,7 @@ Please check the detailed compatibility list via the following link:
 
 ## Contribute to Scripts
 
-https://github.com/cpuwolf/qmdevscripts
+https://github.com/cpuwolf/flyluaioscripts
 
 ## Download
 
