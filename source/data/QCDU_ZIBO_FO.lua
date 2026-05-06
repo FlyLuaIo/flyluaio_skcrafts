@@ -3,7 +3,7 @@
 -- Author: QuickMade
 -- Email:  409050332@qq.com
 -- Website: https://space.bilibili.com/323386663/
--- GitHub Repository: https://gitee.com/cpuwolf/FlyLuaIo
+-- GitHub Repository: https://gitee.com/FlyLuaIo/flyluaio
 -- Last Modified: 2023-10-31
 -- Version: 3.51.7 (ZIBO)
 --

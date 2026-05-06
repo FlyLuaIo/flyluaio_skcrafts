@@ -1,106 +1,49 @@
-[中文 ](README.md) | [English](README_EN.md)
+好的，以下是您提供的文本的中文翻译：
 
+# USB HID 设备插件 (FlyLuaIo)
 
-# USB HID 插件 (FlyLuaIo)
+使用 Lua 控制 X-Plane 11/12 飞行模拟器的 USB HID 硬件
 
-这是为 X-Plane 11/12 设计的USB HID驱动软件。
-它拥有强大的扩展性，插件内置了对编程初学者十分友好的 Lua 语言引擎，让您可以轻松为自己的飞机添加支持。
+# 功能特性
 
-# 硬件支持列表
-- 蜂窝油门Bravo
-- 赛钛客/罗技 Multi Panel
-- 赛钛客/罗技 Radio Panel
-- 赛钛客/罗技 Switch Panel
-- 翼胜/WinCtrl AGP
-- VKBsim Gunfighter MCG Ultimate Twist
-- 奎克质造设备
-- 添加中。。。（Json+Lua即可增加设备）
+*   **实时添加设备**：Json + Lua 即可成为新设备，无需编译代码。
+*   **零性能影响**：对游戏帧率 (FPS) 绝对零影响。
+*   **自动飞行设备按键分配**：告别手动设置数百个按键的痛苦。
+*   **平滑的飞机切换**：告别在整个互联网上搜索配置文件文件的麻烦。
+*   **旋转编码器加速**：优化您的操作体验。
+*   **内置 Lua 语言引擎**：使用简单，易于定制。
+*   **轻松调试**：编辑 Lua 文件后自动重新加载 Lua 脚本，加快调试过程。
+*   **飞机状态同步**：支持冷舱和黑舱驾驶舱状态同步。
+*   **模拟故障同步**：支持模拟飞机故障状态同步。
+*   **跨平台操作**：全面支持 Windows、Linux 和 Mac 系统。
+*   **原生 Apple ARM 支持**：为 Apple M 系列芯片提供原生支持。
+*   **JSON 定义 USB HID**：添加 Json，即可添加 USB HID 设备。
+*   **Skunkcrafts 支持**：轻松更新软件的小改动。
 
-## 游戏兼容性列表
+# 游戏兼容性列表
 
 请通过以下链接查看详细的兼容性列表：
 [设备游戏兼容性列表](https://docs.qq.com/sheet/DWERFQnRmVUFZeHBi?tab=000001)
 
-# 功能特性
+## 硬件
+- Honeycomb Bravo
+- Saitek Multi Panel
+- Saitek Radio Panel
+- Saitek Switch Panel
+- WinWing/WinCtrl ECAM
+- VKBsim Gunfighter MCG Ultimate Twist
+- Quickmadesim QGMC710, QMCP737C, QG1K, QFCU, QCDU, QMPE, QMOVH-A
+- 正在添加中 ... (Json + Lua 即可成为新的 USB 设备)
 
-*   **实时添加一个设备**: Json+Lua就是一个新设备，无需编译
-*   **零帧率影响**：对游戏帧率 (FPS) 毫无影响。
-*   **飞行设备按键自动分配**：告别手动设置成百上千个按键的痛苦。
-*   **丝滑切换飞机**：告别全网络四处寻找配置文件的痛苦。
-*   **旋转按钮加速**：优化您的操作体验。
-*   **内置Lua语言引擎**：简单易用，方便自定义。
-*   **轻松调试**：无需重启 X-Plane 即可即时重载 Lua 脚本，加快适配飞机。
-*   **轻松调试**：当发现lua文件发生变化自动重载 Lua 脚本，加快适配飞机。
-*   **飞机状态同步**：支持飞机的冷舱和暗舱状态同步。
-*   **模拟故障同步**：支持飞机模拟的故障状态同步。
-*   **跨平台运行**：完美支持 Windows, Linux 和 Mac 系统。
-*   **原生Apple ARM支持**：为苹果M系列芯片提供原生支持。
-*   **自定义设备**：生成.json文件，即可对设备增加支持
-*   **Skunkcrafts支持**: 小版本升级更简单
+## 贡献脚本
 
-
+https://github.com/FlyLuaIo/flyluaioscripts
 
 ## 下载
 
-您可以从以下地址获取最新版本的插件：
-[最新版本下载](https://gitee.com/cpuwolf/flyluaio/releases)
+您可以从以下地址获取插件的最新版本：
+[最新版本下载](https://gitee.com/FlyLuaIo/flyluaio/releases)
 
-## 安装程序
+## 致开发者
 
-我们提供了简单易用的安装向导。
-
-![奎克质造设备安装程序](img/qmdev_mac_install.gif)
-
-## 安装说明
-
-### 在 MacOS 上安装
-
-#### **MacOS 安装步骤**
-1.  解压缩installer_6_8_mac.zip
-2.  打开“终端”并执行以下命令，可以允许没给苹果缴费的开发者：
-    ```bash
-    xattr -cr installer_6_8_mac.app
-    ```
-3. 运行installer_6_8_mac.app
-
-### 在 Linux 上安装
-
-#### **Ubuntu 18.04 安装步骤**
-1. 运行installer_6_8_lin
-
-#### **Linux 设备无法找到的手动配置**
-
-您需要编辑 hidraw 设备的访问权限。
-```bash
-sudo vim /etc/udev/rules.d/99-joysticks.rules
-```
-将以下内容添加至文件中：
-```
-KERNEL=="event*", NAME="input/%k", MODE="0666", GROUP="input"
-KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", GROUP="input"
-```
-重新加载设备规则
-```bash
-sudo udevadm control --reload-rules
-```
-
-#### **Linux 内核贡献**
-我们修复了 Linux 内核对摇杆最大按键数的限制，详情请见：
-[Linux 内核补丁](https://patchwork.kernel.org/patch/11657985/)
-
-## 截图
-
-![轻松调试](img/menu_reload.png)
-![零性能影响](img/nocost.jpg)
-
-
-## 面向开发者
-
-### **如何编写您自己的 .lua 脚本文件**
-
-我们欢迎您为自己喜欢的机模编写脚本！详细的开发者文档请参考我们的 Wiki：
-[FlyLuaIo .lua 文件编写指南](https://gitee.com/cpuwolf/Quickmadedevice/wiki/FlyLuaIo-.lua-files)
-
-### **更多Lua开发者文档**
-
-[访问开发者文档中心](https://gitee.com/cpuwolf/Quickmadedevice/wiki)
+[访问开发者文档中心](https://gitee.com/FlyLuaIo/flyluaio/wiki)

@@ -1,6 +1,6 @@
 zone|custom
 liveries|false
-module|https://gitee.com/cpuwolf/flyluaio/raw/beta/release
+module|https://gitee.com/FlyLuaIo/flyluaio/raw/beta/release
 version|@VERSION@
 disabled|false
 name|flyluaio

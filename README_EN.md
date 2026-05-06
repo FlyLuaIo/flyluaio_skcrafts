@@ -1,22 +1,8 @@
 # USB HID Device Plugin (FlyLuaIo)
 
-This is the USB HID device software designed for X-Plane 11/12 and MSFS 2020/2024.
-It boasts powerful extensibility, with a built-in Lua language engine that is very friendly to programming beginners, allowing you to easily add support for your own aircraft.
+use Lua to control flight simulation X-Plane 11/12 USB HID hardware
 
-# Hardware
-- Honeycomb Bravo
-- Saitek Multi Panel
-- Saitek Radio Panel
-- Saitek Switch Panel
-- WinWing/WinCtrl AGP
-- VKBsim Gunfighter MCG Ultimate Twist
-- Quickmadesim QGMC710, QMCP737C, QG1K, QFCU, QCDU, QMPE, QMOVH-A
-- Adding ... (Json + Lua is a new USB device) 
 
-## Game Compatibility List
-
-Please check the detailed compatibility list via the following link:
-[Device Game Compatibility List](https://docs.qq.com/sheet/DWERFQnRmVUFZeHBi?tab=000001)
 
 # Features
 
@@ -35,6 +21,21 @@ Please check the detailed compatibility list via the following link:
 *   **Skunkcrafts Support**: Easy update software small changes
 
 
+# Game Compatibility List
+
+Please check the detailed compatibility list via the following link:
+[Device Game Compatibility List](https://docs.qq.com/sheet/DWERFQnRmVUFZeHBi?tab=000001)
+
+## Hardware
+- Honeycomb Bravo
+- Saitek Multi Panel
+- Saitek Radio Panel
+- Saitek Switch Panel
+- WinWing/WinCtrl ECAM
+- VKBsim Gunfighter MCG Ultimate Twist
+- Quickmadesim QGMC710, QMCP737C, QG1K, QFCU, QCDU, QMPE, QMOVH-A
+- Adding ... (Json + Lua is a new USB device) 
+
 
 ## Contribute to Scripts
 
@@ -43,64 +44,10 @@ https://github.com/FlyLuaIo/flyluaioscripts
 ## Download
 
 You can get the latest version of the plugin from the following address:
-[Latest Version Download](https://gitee.com/cpuwolf/flyluaio/releases)
-
-## Installer
-
-We provide an easy-to-use installation wizard.
-
-![奎克质造设备安装程序](img/qmdev_mac_install.gif)
-
-## Installation Instructions
-
-### Installing on MacOS
-
-#### **MacOS Installation Steps**
-1. Unzip installer_6_8_mac.zip
-2. Open "Terminal" and execute the following command to allow developers who haven't paid Apple:
-    ```bash
-    xattr -cr installer_6_8_mac.app
-    ```
-3. Run installer_6_8_mac.app
-
-### Installing on Linux
-
-#### **Ubuntu 18.04 Installation Steps**
-1. Run installer_6_8_lin
-
-#### **Manual Configuration if Linux Device is Not Found**
-
-You need to edit the access permissions for hidraw devices.
-```bash
-sudo vim /etc/udev/rules.d/99-joysticks.rules
-```
-Add the following content to the file:
-```
-KERNEL=="event*", NAME="input/%k", MODE="0666", GROUP="input"
-KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", GROUP="input"
-```
-Reload device rules
-```bash
-sudo udevadm control --reload-rules
-```
-
-#### **Linux Kernel Contribution**
-We fixed the Linux kernel's limitation on the maximum number of joystick buttons, see details here:
-[Linux Kernel Patch](https://patchwork.kernel.org/patch/11657985/)
-
-## Screenshots
-
-![轻松调试](img/menu_reload.png)
-![零性能影响](img/nocost.jpg)
+[Latest Version Download](https://gitee.com/FlyLuaIo/flyluaio/releases)
 
 
 ## For Developers
 
-### **How to Write Your Own .lua Script Files**
 
-We welcome you to write scripts for your favorite aircraft models! For detailed developer documentation, please refer to our Wiki:
-[FlyLuaIo .lua File Writing Guide](https://gitee.com/cpuwolf/Quickmadedevice/wiki/FlyLuaIo-.lua-files)
-
-### **More Lua Developer Documentation**
-
-[Visit the Developer Documentation Center](https://gitee.com/cpuwolf/Quickmadedevice/wiki)
+[Visit the Developer Documentation Center](https://gitee.com/FlyLuaIo/flyluaio/wiki)
