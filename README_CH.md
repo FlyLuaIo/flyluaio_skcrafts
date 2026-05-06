@@ -1,3 +1,6 @@
+
+[English](README.md) | [中文](README_CH.md) 
+
 # USB HID 设备插件 (FlyLuaIo)
 
 使用 Lua 控制 X-Plane 11/12 飞行模拟器的 USB HID 硬件

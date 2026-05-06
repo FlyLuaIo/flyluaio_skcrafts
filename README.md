@@ -1,3 +1,5 @@
+[English](README.md) | [中文](README_CH.md) 
+
 # USB HID Device Plugin (FlyLuaIo)
 
 use Lua to control flight simulation X-Plane 11/12 USB HID hardware
