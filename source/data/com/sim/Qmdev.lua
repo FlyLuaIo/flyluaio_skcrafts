@@ -403,6 +403,34 @@ function Qmdev:CfgPSw(KeyIdx, idx, presexpect, resexpect)
     end
 end
 
+-- PID position switch Toggle
+function Qmdev:GetPSw(idx)
+    return uluaGet(_G.QmdevPosSwitch.PosStatusDr[idx])
+end
+
+function Qmdev:PSwDelay(idx, timeout, intexpect)
+    local str = "QmdevPosSwitchSet(" .. tostring(idx) .. ", " .. tostring(intexpect) .. ")"
+    uluasetTimeout(str, timeout)
+end
+
+function Qmdev:PSwTog(idx, timeout, presexpect, resexpect)
+    local val = self:GetPSw(idx) == presexpect and resexpect or presexpect
+    self:PSwDelay(idx, timeout, val)
+end
+
+_G.QmdevPosSwitchToggle = function(idx, presexpect, resexpect)
+    local pos = uluaGet(_G.QmdevPosSwitch.PosStatusDr[idx])
+    local val = pos == presexpect and resexpect or presexpect
+    uluaLog(string.format("Toggle: %d -> %d ", pos, val))
+    local str = "QmdevPosSwitchSet(" .. tostring(idx) .. ", " .. tostring(val) .. ")"
+    uluasetTimeout(str, 0)
+end
+function Qmdev:CfgPSwTog(KeyIdx, idx, presexpect, resexpect)
+    self:AddKey(KeyIdx)
+    self:CfgFc(KeyIdx,
+        "QmdevPosSwitchToggle(" .. tostring(idx) .. "," .. tostring(presexpect) .. "," .. tostring(resexpect) .. ")")
+end
+
 -- add a menu in GUI
 function Qmdev:AddTogMenu(menuEn, menuCh, globalvarstr)
     uluaAddToggleMenu(self:getClassName() .. ': ' .. menuEn, self:getClassName() .. ': ' .. menuCh, globalvarstr)
