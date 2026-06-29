@@ -2,18 +2,7 @@
 -- created by Wei Shuai <cpuwolf@gmail.com> 2026-05-09
 -- *****************************************************************
 
-if ilua_is_acftitle_excluded("B77") then
-	return
-end
-
-local file
-file = AIRCRAFT_PATH .. "\\..\\plugins\\T7Avionics\\64\\win.xpl"
--- uluaLog(file)
-
-if ilua_file_exists(file) then
-	uluaLog("FF777 old")
-	return
-end
+if ilua_require_ff777(true) then return end
 
 -- Do not remove below lines: hardware detection
 local wwagp = com.sim.qm.Wwagp:new()
@@ -88,13 +77,13 @@ wwagp:GetBkl('sim/cockpit/electrical/cockpit_lights', 250)
 wwagp:GetDigiBkl("sim/cockpit2/switches/avionics_power_on", 200) -- 0~1
 wwagp:GetLedBkl("sim/cockpit2/switches/avionics_power_on", 200)  -- 0~1
 --================================ Input LED/LCD ===
-wwagp:GetUlockL("sim/flightmodel2/gear/deploy_ratio[1]")
-wwagp:GetUlockN("sim/flightmodel2/gear/deploy_ratio[0]")
-wwagp:GetUlockR("sim/flightmodel2/gear/deploy_ratio[3]")
+wwagp:GetUlockL("sim/cockpit2/annunciators/gear_unsafe")
+wwagp:GetUlockN("sim/cockpit2/annunciators/gear_unsafe")
+wwagp:GetUlockR("sim/cockpit2/annunciators/gear_unsafe")
 wwagp:GetBrakeHot('cpuwolf/flyluaio/WwAgp/condbtn[1]')
-wwagp:GetLockL("sim/flightmodel2/gear/deploy_ratio[1]")
-wwagp:GetLockN("sim/flightmodel2/gear/deploy_ratio[0]")
-wwagp:GetLockR("sim/flightmodel2/gear/deploy_ratio[3]")
+wwagp:GetLockL("sim/aircraft/parts/acf_gear_deploy[1]", false, 0.01)
+wwagp:GetLockN("sim/aircraft/parts/acf_gear_deploy[2]", false, 0.01)
+wwagp:GetLockR("sim/aircraft/parts/acf_gear_deploy[3]", false, 0.01)
 wwagp:GetBrakeOn('cpuwolf/flyluaio/WwAgp/condbtn[1]')
 wwagp:GetLowD('cpuwolf/flyluaio/WwAgp/condbtn[1]')
 wwagp:GetMedD('cpuwolf/flyluaio/WwAgp/condbtn[1]')
@@ -242,9 +231,9 @@ GlobalFrameLoopManager:add(function()
 	wwagp:SetUlockN(1)
 	wwagp:SetUlockR(1)
 	wwagp:SetBrakeHot()
-	wwagp:SetLockL(0.999)
-	wwagp:SetLockN(0.999)
-	wwagp:SetLockR(0.999)
+	wwagp:SetLockL()
+	wwagp:SetLockN()
+	wwagp:SetLockR()
 	wwagp:SetBrakeOn()
 	wwagp:SetLowD()
 	wwagp:SetMedD()

@@ -1,11 +1,7 @@
 -- *****************************************************************
 -- created by Wei Shuai <cpuwolf@gmail.com> 2026-04-19
 -- *****************************************************************
-if ilua_is_acftitle_excluded('A3') or ilua_is_acfpath_excluded('toliss') then
-	if ilua_is_acftitle_excluded('A2') or ilua_is_acfpath_excluded('toliss') then
-		return
-	end
-end
+if ilua_require_toliss() then return end
 -- Do not remove below lines: hardware detection
 local wwagp = com.sim.qm.Wwagp:new()
 if not wwagp:Init() then
@@ -60,7 +56,7 @@ else
 
 	wwagp:CfgLongFc(4, 1000, key_max_long_func, key_max_short_func)
 end
-wwagp:CfgVal(5, 'AirbusFBW/NWSnAntiSkid')
+wwagp:CfgVal(5, 'AirbusFBW/NWSnAntiSkid', 1, 0)
 
 wwagp:CfgCmd(8, 'toliss_airbus/chrono/ChronoResetPush')
 wwagp:CfgCmd(11, 'toliss_airbus/chrono/ChronoStartStopPush')
