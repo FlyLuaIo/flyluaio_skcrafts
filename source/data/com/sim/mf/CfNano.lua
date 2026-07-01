@@ -38,6 +38,10 @@ function CfNano:Init(FastTurnsPerSecond)
 	return true
 end
 
+function CfNano.Open(...)
+	return com.sim.Qmdev.Open(CfNano, ...)
+end
+
 function CfNano:InitLedModule()
 	_G.idr_cfnano_mf_segment_mask = uluaFind('cpuwolf/mf/CfNano/segment/0/mask')
 	_G.idr_cfnano_mf_segment_points = uluaFind('cpuwolf/mf/CfNano/segment/0/points')
@@ -47,7 +51,7 @@ function CfNano:InitLedModule()
 
 	uluaSet(_G.idr_cfnano_mf_segment_mask, 63)
 	uluaSet(_G.idr_cfnano_mf_segment_points, 8)
-	uluaSet(_G.idr_cfnano_mf_segment_brightness, 50)
+	uluaSet(_G.idr_cfnano_mf_segment_brightness, 1)
 	self.segment_commit_seq = 0
 end
 

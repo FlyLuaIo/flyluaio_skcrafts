@@ -4,10 +4,8 @@
 if ilua_require_toliss() then return end
 
 -- Do not remove below lines: hardware detection
-local qmpe = com.sim.qm.Qmpe:new()
-if not qmpe:Init() then
-    return
-end
+local qmpe = com.sim.qm.Qmpe.Open()
+if not qmpe then return end
 -- Do not remove above lines: hardware detection
 
 uluaLog("QMPE for Toliss")
@@ -557,17 +555,16 @@ end
 
 function Qmpe_Toliss_loop()
     -- expert code: cold and dark
-    if dr_power:ChangedUpdate() then
-        local b_power = dr_power:GetOld()
-        if b_power == 0 then
-            qmpe:Off()
-            return
-        else
-            if dr_bkl_power:Get() > 0 then
-                qmpe:FreshBkl()
-            end
+    local b_power = dr_power:Get()
+    if b_power == 0 then
+        qmpe:Off()
+        return
+    else
+        if dr_bkl_power:Get() > 0 then
+            qmpe:FreshBkl()
         end
     end
+
 
     -- expert code: test mode
     if dr_test:ChangedUpdate() then
