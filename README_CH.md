@@ -1,9 +1,9 @@
 
 [English](README.md) | [中文](README_CH.md) 
 
-# USB HID 设备插件 (FlyLuaIo)
+# USB HID & MobiFlight 设备插件 (FlyLuaIo)
 
-使用 Lua 控制 X-Plane 11/12 飞行模拟器的 USB HID 硬件
+使用 Lua 控制 X-Plane 11/12 飞行模拟器的 USB HID 与 MobiFlight 串口硬件
 
 # 功能特性
 
@@ -19,6 +19,9 @@
 *   **跨平台操作**：全面支持 Windows、Linux 和 Mac 系统。
 *   **原生 Apple ARM 支持**：为 Apple M 系列芯片提供原生支持。
 *   **JSON 定义 USB HID**：添加 Json，即可添加 USB HID 设备。
+*   **JSON 定义 MobiFlight**：添加 Json，即可添加 MobiFlight 串口设备。
+*   **MobiFlight 串口自动匹配**：按板卡序列号匹配 `mobiflight/*.json` 配置。
+*   **MobiFlight IO 桥接**：按键、编码器、步进电机、舵机、移位寄存器、数码管/LCD。
 *   **Skunkcrafts 支持**：轻松更新软件的小改动。
 
 # 游戏兼容性列表
@@ -26,7 +29,7 @@
 请通过以下链接查看详细的兼容性列表：
 [设备游戏兼容性列表](https://docs.qq.com/sheet/DWERFQnRmVUFZeHBi?tab=000001)
 
-## 硬件
+## USB HID 硬件
 - Honeycomb Bravo
 - Saitek Multi Panel
 - Saitek Radio Panel
@@ -34,7 +37,13 @@
 - WinWing/WinCtrl ECAM
 - VKBsim Gunfighter MCG Ultimate Twist
 - Quickmadesim QGMC710, QMCP737C, QG1K, QFCU, QCDU, QMPE, QMOVH-A
-- 正在添加中 ... (Json + Lua 即可成为新的 USB 设备)
+- 正在添加中 ... (Json + Lua 即可成为新的 USB HID 设备)
+
+## MobiFlight 硬件
+- Rowsfire A107 / B107
+- CfMega (G1000)
+- 自定义 MobiFlight 兼容 Arduino 板卡
+- 正在添加中 ... (Json + Lua 即可成为新的 MobiFlight 设备)
 
 ## 贡献脚本
 
