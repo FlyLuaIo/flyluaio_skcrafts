@@ -4,7 +4,9 @@
 
 use Lua to control flight simulation X-Plane 11/12 USB HID and MobiFlight serial hardware
 
+## Video Demo
 
+[![Video Demo](https://img.youtube.com/vi/caDpAYDeze4/maxresdefault.jpg)](https://youtu.be/caDpAYDeze4?si=OzATDYuuQJZBbDq9)
 
 # Features
 

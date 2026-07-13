@@ -5,6 +5,10 @@
 
 使用 Lua 控制 X-Plane 11/12 飞行模拟器的 USB HID 与 MobiFlight 串口硬件
 
+## 视频演示
+
+[![视频演示](https://i0.hdslb.com/bfs/archive/98a4bc3892cd4f517ce9000261a5db56d82e5c5f.jpg)](https://www.bilibili.com/video/BV1hXMT6bEPi/)
+
 # 功能特性
 
 *   **实时添加设备**：Json + Lua 即可成为新设备，无需编译代码。
