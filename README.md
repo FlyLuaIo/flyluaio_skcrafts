@@ -47,6 +47,18 @@ Please check the detailed compatibility list via the following link:
 - Custom MobiFlight-compatible Arduino builds
 - Adding ... (Json + Lua is a new MobiFlight device)
 
+### MobiFlight on Linux
+
+mobiFlight devices will be opened in Linux system
+
+sudo nano /etc/udev/rules.d/99-ttyusb-permissions.rules
+
+```
+KERNEL=="ttyUSB*", MODE="0666"
+```
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+
 
 ## Contribute to Scripts
 
