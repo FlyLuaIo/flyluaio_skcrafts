@@ -11,7 +11,7 @@ use Lua to control flight simulation X-Plane 11/12 USB HID and MobiFlight serial
 # Features
 
 *   **Real-Time Add Device**: Json + Lua is a new Device without compiling code
-*   **Zero Performance Impact**: Absolutely Zero impact on game frame rates (FPS).
+*   **ZERO X-Plane FPS impact**: Embedded LuaJIT is *not* the same performance model as typical market LuaJIT plugins (XLua, SASL, FlyWithLua). Those usually run Lua every frame on the sim / flight-loop thread (community reports show material frametime cost on complex aircraft); FlyLuaIo runs script work off that path — **absolutely zero impact on X-Plane FPS**.
 *   **Automatic Flight Device Key Assignment**: Say goodbye to the pain of manually setting hundreds of keys.
 *   **Smooth Aircraft Switching**: Say goodbye to the hassle of searching the entire internet for configuration files.
 *   **Rotary Knob Acceleration**: Optimizes your operational experience.
