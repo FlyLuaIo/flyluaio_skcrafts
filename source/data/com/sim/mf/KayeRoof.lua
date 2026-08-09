@@ -104,7 +104,7 @@ function KayeRoof:InitLedModule()
 	-- mfproj DisplayLedModuleSize=6 → mask 0b111111; DP on digits 1 and 4 (BAT2/BAT1)
 	uluaSet(_G.idr_kayeroof_mf_segment_mask, 63)
 	uluaSet(_G.idr_kayeroof_mf_segment_points, 18)
-	uluaSet(_G.idr_kayeroof_mf_segment_brightness, 1)
+	uluaSet(_G.idr_kayeroof_mf_segment_brightness, 100)
 	self.segment_commit_seq = 0
 end
 
@@ -114,17 +114,30 @@ function KayeRoof:CommitSegment()
 end
 
 -- ========
--- segment BAT 1+2
+-- segment BAT 1+2 (one LedModule; BAT1+BAT2 voltages packed into a single text write)
 
-function KayeRoof:GetBat12(dpath)
-	self.d_bat_1_2 = iDataRef:New(dpath)
+local function pack_bat12_volts(v_bat1, v_bat2)
+	-- mfproj: BAT2 digits 0..2 DP@1, BAT1 digits 3..5 DP@4; Round($,1)
+	local n1 = math.floor((v_bat1 or 0) * 10 + 0.5)
+	local n2 = math.floor((v_bat2 or 0) * 10 + 0.5)
+	if n1 < 0 then n1 = 0 elseif n1 > 999 then n1 = 999 end
+	if n2 < 0 then n2 = 0 elseif n2 > 999 then n2 = 999 end
+	return n2 * 1000 + n1
+end
+
+function KayeRoof:GetBat12(dpath_bat1, dpath_bat2)
+	self.d_bat12_1 = iDataRef:New(dpath_bat1)
+	self.d_bat12_2 = iDataRef:New(dpath_bat2)
 end
 
 function KayeRoof:SetBat12(val)
 	if val == nil then
-		val = self.d_bat_1_2:Get()
-		if self.d_bat_1_2:ChangedUpdate() then
-			uluaSet(_G.idr_kayeroof_mf_segment_bat_1_2, val)
+		local v1 = self.d_bat12_1:Get()
+		local v2 = self.d_bat12_2:Get()
+		local changed = self.d_bat12_1:ChangedUpdate()
+		changed = self.d_bat12_2:ChangedUpdate() or changed
+		if changed then
+			uluaSet(_G.idr_kayeroof_mf_segment_bat_1_2, pack_bat12_volts(v1, v2))
 			self:CommitSegment()
 		end
 	else
@@ -134,16 +147,17 @@ function KayeRoof:SetBat12(val)
 end
 
 function KayeRoof:FreshBat12()
-	self.d_bat_1_2:Invalid(-1)
+	self.d_bat12_1:Invalid(-1)
+	self.d_bat12_2:Invalid(-1)
 end
 
 -- ========
 -- output FIRE L (output/0/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetFireL(dpath, scale)
-	self.d_fire_l_scale = scale == nil and 1 or scale
+	self.d_fire_l_scale = scale == nil and 255 or scale
 	self.d_fire_l = iDataRef:New(dpath)
 end
 
@@ -165,10 +179,10 @@ end
 -- ========
 -- output ANTI_ICE_ENG2_UP (output/1/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetAntiIceEng2Up(dpath, scale)
-	self.d_anti_ice_eng2_up_scale = scale == nil and 1 or scale
+	self.d_anti_ice_eng2_up_scale = scale == nil and 255 or scale
 	self.d_anti_ice_eng2_up = iDataRef:New(dpath)
 end
 
@@ -190,10 +204,10 @@ end
 -- ========
 -- output ANTI_ICE_ENG1_DOWN (output/2/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetAntiIceEng1Down(dpath, scale)
-	self.d_anti_ice_eng1_down_scale = scale == nil and 1 or scale
+	self.d_anti_ice_eng1_down_scale = scale == nil and 255 or scale
 	self.d_anti_ice_eng1_down = iDataRef:New(dpath)
 end
 
@@ -215,10 +229,10 @@ end
 -- ========
 -- output ANTI_ICE_ENG2_DOWN (output/3/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetAntiIceEng2Down(dpath, scale)
-	self.d_anti_ice_eng2_down_scale = scale == nil and 1 or scale
+	self.d_anti_ice_eng2_down_scale = scale == nil and 255 or scale
 	self.d_anti_ice_eng2_down = iDataRef:New(dpath)
 end
 
@@ -240,10 +254,10 @@ end
 -- ========
 -- output ANTI_ICE_WING_DOWN (output/4/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetAntiIceWingDown(dpath, scale)
-	self.d_anti_ice_wing_down_scale = scale == nil and 1 or scale
+	self.d_anti_ice_wing_down_scale = scale == nil and 255 or scale
 	self.d_anti_ice_wing_down = iDataRef:New(dpath)
 end
 
@@ -265,10 +279,10 @@ end
 -- ========
 -- output APU BLEED DOWN (output/5/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetApuBleedDown(dpath, scale)
-	self.d_apu_bleed_down_scale = scale == nil and 1 or scale
+	self.d_apu_bleed_down_scale = scale == nil and 255 or scale
 	self.d_apu_bleed_down = iDataRef:New(dpath)
 end
 
@@ -290,10 +304,10 @@ end
 -- ========
 -- output EXT PWR DOWN (output/6/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetExtPwrDown(dpath, scale)
-	self.d_ext_pwr_down_scale = scale == nil and 1 or scale
+	self.d_ext_pwr_down_scale = scale == nil and 255 or scale
 	self.d_ext_pwr_down = iDataRef:New(dpath)
 end
 
@@ -315,10 +329,10 @@ end
 -- ========
 -- output ELEC PUMP DOWN (output/7/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetElecPumpDown(dpath, scale)
-	self.d_elec_pump_down_scale = scale == nil and 1 or scale
+	self.d_elec_pump_down_scale = scale == nil and 255 or scale
 	self.d_elec_pump_down = iDataRef:New(dpath)
 end
 
@@ -340,10 +354,10 @@ end
 -- ========
 -- output FIRE C (output/8/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetFireC(dpath, scale)
-	self.d_fire_c_scale = scale == nil and 1 or scale
+	self.d_fire_c_scale = scale == nil and 255 or scale
 	self.d_fire_c = iDataRef:New(dpath)
 end
 
@@ -365,10 +379,10 @@ end
 -- ========
 -- output BAT1_DOWN (output/9/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetBat1Down(dpath, scale)
-	self.d_bat1_down_scale = scale == nil and 1 or scale
+	self.d_bat1_down_scale = scale == nil and 255 or scale
 	self.d_bat1_down = iDataRef:New(dpath)
 end
 
@@ -390,10 +404,10 @@ end
 -- ========
 -- output BAT2_UP (output/10/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetBat2Up(dpath, scale)
-	self.d_bat2_up_scale = scale == nil and 1 or scale
+	self.d_bat2_up_scale = scale == nil and 255 or scale
 	self.d_bat2_up = iDataRef:New(dpath)
 end
 
@@ -415,10 +429,10 @@ end
 -- ========
 -- output BAT2_DOWN (output/11/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetBat2Down(dpath, scale)
-	self.d_bat2_down_scale = scale == nil and 1 or scale
+	self.d_bat2_down_scale = scale == nil and 255 or scale
 	self.d_bat2_down = iDataRef:New(dpath)
 end
 
@@ -440,10 +454,10 @@ end
 -- ========
 -- output FIRE R (output/12/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetFireR(dpath, scale)
-	self.d_fire_r_scale = scale == nil and 1 or scale
+	self.d_fire_r_scale = scale == nil and 255 or scale
 	self.d_fire_r = iDataRef:New(dpath)
 end
 
@@ -465,10 +479,10 @@ end
 -- ========
 -- output IR1_LOWER (output/13/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetIr1Lower(dpath, scale)
-	self.d_ir1_lower_scale = scale == nil and 1 or scale
+	self.d_ir1_lower_scale = scale == nil and 255 or scale
 	self.d_ir1_lower = iDataRef:New(dpath)
 end
 
@@ -490,10 +504,10 @@ end
 -- ========
 -- output IR1_UP (output/14/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetIr1Up(dpath, scale)
-	self.d_ir1_up_scale = scale == nil and 1 or scale
+	self.d_ir1_up_scale = scale == nil and 255 or scale
 	self.d_ir1_up = iDataRef:New(dpath)
 end
 
@@ -515,10 +529,10 @@ end
 -- ========
 -- output IR2_LOWER (output/15/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetIr2Lower(dpath, scale)
-	self.d_ir2_lower_scale = scale == nil and 1 or scale
+	self.d_ir2_lower_scale = scale == nil and 255 or scale
 	self.d_ir2_lower = iDataRef:New(dpath)
 end
 
@@ -540,10 +554,10 @@ end
 -- ========
 -- output IR3_LOWER (output/16/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetIr3Lower(dpath, scale)
-	self.d_ir3_lower_scale = scale == nil and 1 or scale
+	self.d_ir3_lower_scale = scale == nil and 255 or scale
 	self.d_ir3_lower = iDataRef:New(dpath)
 end
 
@@ -565,10 +579,10 @@ end
 -- ========
 -- output EXT PWR UP (output/17/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetExtPwrUp(dpath, scale)
-	self.d_ext_pwr_up_scale = scale == nil and 1 or scale
+	self.d_ext_pwr_up_scale = scale == nil and 255 or scale
 	self.d_ext_pwr_up = iDataRef:New(dpath)
 end
 
@@ -590,10 +604,10 @@ end
 -- ========
 -- output ANTI_ICE_WING_UP (output/18/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetAntiIceWingUp(dpath, scale)
-	self.d_anti_ice_wing_up_scale = scale == nil and 1 or scale
+	self.d_anti_ice_wing_up_scale = scale == nil and 255 or scale
 	self.d_anti_ice_wing_up = iDataRef:New(dpath)
 end
 
@@ -615,10 +629,10 @@ end
 -- ========
 -- output APU BLEED UP (output/19/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetApuBleedUp(dpath, scale)
-	self.d_apu_bleed_up_scale = scale == nil and 1 or scale
+	self.d_apu_bleed_up_scale = scale == nil and 255 or scale
 	self.d_apu_bleed_up = iDataRef:New(dpath)
 end
 
@@ -640,10 +654,10 @@ end
 -- ========
 -- output ELEC PUMP UP (output/20/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetElecPumpUp(dpath, scale)
-	self.d_elec_pump_up_scale = scale == nil and 1 or scale
+	self.d_elec_pump_up_scale = scale == nil and 255 or scale
 	self.d_elec_pump_up = iDataRef:New(dpath)
 end
 
@@ -665,10 +679,10 @@ end
 -- ========
 -- output ANTI_ICE_ENG1_UP (output/21/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetAntiIceEng1Up(dpath, scale)
-	self.d_anti_ice_eng1_up_scale = scale == nil and 1 or scale
+	self.d_anti_ice_eng1_up_scale = scale == nil and 255 or scale
 	self.d_anti_ice_eng1_up = iDataRef:New(dpath)
 end
 
@@ -690,10 +704,10 @@ end
 -- ========
 -- output CREW SUPPLY (output/22/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetCrewSupply(dpath, scale)
-	self.d_crew_supply_scale = scale == nil and 1 or scale
+	self.d_crew_supply_scale = scale == nil and 255 or scale
 	self.d_crew_supply = iDataRef:New(dpath)
 end
 
@@ -715,10 +729,10 @@ end
 -- ========
 -- output GND CTL (output/23/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetGndCtl(dpath, scale)
-	self.d_gnd_ctl_scale = scale == nil and 1 or scale
+	self.d_gnd_ctl_scale = scale == nil and 255 or scale
 	self.d_gnd_ctl = iDataRef:New(dpath)
 end
 
@@ -740,10 +754,10 @@ end
 -- ========
 -- output BAT1_UP (output/24/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetBat1Up(dpath, scale)
-	self.d_bat1_up_scale = scale == nil and 1 or scale
+	self.d_bat1_up_scale = scale == nil and 255 or scale
 	self.d_bat1_up = iDataRef:New(dpath)
 end
 
@@ -765,10 +779,10 @@ end
 -- ========
 -- output LTK PUMPS_1_UP (output/25/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetLtkPumps1Up(dpath, scale)
-	self.d_ltk_pumps_1_up_scale = scale == nil and 1 or scale
+	self.d_ltk_pumps_1_up_scale = scale == nil and 255 or scale
 	self.d_ltk_pumps_1_up = iDataRef:New(dpath)
 end
 
@@ -790,10 +804,10 @@ end
 -- ========
 -- output LTK PUMPS_2_DOWN (output/26/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetLtkPumps2Down(dpath, scale)
-	self.d_ltk_pumps_2_down_scale = scale == nil and 1 or scale
+	self.d_ltk_pumps_2_down_scale = scale == nil and 255 or scale
 	self.d_ltk_pumps_2_down = iDataRef:New(dpath)
 end
 
@@ -815,10 +829,10 @@ end
 -- ========
 -- output IR3_UP (output/27/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetIr3Up(dpath, scale)
-	self.d_ir3_up_scale = scale == nil and 1 or scale
+	self.d_ir3_up_scale = scale == nil and 255 or scale
 	self.d_ir3_up = iDataRef:New(dpath)
 end
 
@@ -840,10 +854,10 @@ end
 -- ========
 -- output IR2_UP (output/28/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetIr2Up(dpath, scale)
-	self.d_ir2_up_scale = scale == nil and 1 or scale
+	self.d_ir2_up_scale = scale == nil and 255 or scale
 	self.d_ir2_up = iDataRef:New(dpath)
 end
 
@@ -865,10 +879,10 @@ end
 -- ========
 -- output RTK PUMPS_1_UP (output/29/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetRtkPumps1Up(dpath, scale)
-	self.d_rtk_pumps_1_up_scale = scale == nil and 1 or scale
+	self.d_rtk_pumps_1_up_scale = scale == nil and 255 or scale
 	self.d_rtk_pumps_1_up = iDataRef:New(dpath)
 end
 
@@ -890,10 +904,10 @@ end
 -- ========
 -- output LTK PUMPS_1_DOWN (output/30/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetLtkPumps1Down(dpath, scale)
-	self.d_ltk_pumps_1_down_scale = scale == nil and 1 or scale
+	self.d_ltk_pumps_1_down_scale = scale == nil and 255 or scale
 	self.d_ltk_pumps_1_down = iDataRef:New(dpath)
 end
 
@@ -915,10 +929,10 @@ end
 -- ========
 -- output LTK PUMPS_2_UP (output/31/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetLtkPumps2Up(dpath, scale)
-	self.d_ltk_pumps_2_up_scale = scale == nil and 1 or scale
+	self.d_ltk_pumps_2_up_scale = scale == nil and 255 or scale
 	self.d_ltk_pumps_2_up = iDataRef:New(dpath)
 end
 
@@ -940,10 +954,10 @@ end
 -- ========
 -- output PUMP 1_UP (output/32/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetPump1Up(dpath, scale)
-	self.d_pump_1_up_scale = scale == nil and 1 or scale
+	self.d_pump_1_up_scale = scale == nil and 255 or scale
 	self.d_pump_1_up = iDataRef:New(dpath)
 end
 
@@ -965,10 +979,10 @@ end
 -- ========
 -- output MODE SEL_DOWN (output/33/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetModeSelDown(dpath, scale)
-	self.d_mode_sel_down_scale = scale == nil and 1 or scale
+	self.d_mode_sel_down_scale = scale == nil and 255 or scale
 	self.d_mode_sel_down = iDataRef:New(dpath)
 end
 
@@ -990,10 +1004,10 @@ end
 -- ========
 -- output PUMP 2_DOWN (output/34/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetPump2Down(dpath, scale)
-	self.d_pump_2_down_scale = scale == nil and 1 or scale
+	self.d_pump_2_down_scale = scale == nil and 255 or scale
 	self.d_pump_2_down = iDataRef:New(dpath)
 end
 
@@ -1015,10 +1029,10 @@ end
 -- ========
 -- output PUMP 1_DOWN (output/35/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetPump1Down(dpath, scale)
-	self.d_pump_1_down_scale = scale == nil and 1 or scale
+	self.d_pump_1_down_scale = scale == nil and 255 or scale
 	self.d_pump_1_down = iDataRef:New(dpath)
 end
 
@@ -1040,10 +1054,10 @@ end
 -- ========
 -- output START_DOWN (output/36/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetStartDown(dpath, scale)
-	self.d_start_down_scale = scale == nil and 1 or scale
+	self.d_start_down_scale = scale == nil and 255 or scale
 	self.d_start_down = iDataRef:New(dpath)
 end
 
@@ -1065,10 +1079,10 @@ end
 -- ========
 -- output PUMP 2_UP (output/37/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetPump2Up(dpath, scale)
-	self.d_pump_2_up_scale = scale == nil and 1 or scale
+	self.d_pump_2_up_scale = scale == nil and 255 or scale
 	self.d_pump_2_up = iDataRef:New(dpath)
 end
 
@@ -1090,10 +1104,10 @@ end
 -- ========
 -- output MODE SEL_UP (output/38/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetModeSelUp(dpath, scale)
-	self.d_mode_sel_up_scale = scale == nil and 1 or scale
+	self.d_mode_sel_up_scale = scale == nil and 255 or scale
 	self.d_mode_sel_up = iDataRef:New(dpath)
 end
 
@@ -1115,10 +1129,10 @@ end
 -- ========
 -- output RTK PUMPS_2_DOWN (output/39/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetRtkPumps2Down(dpath, scale)
-	self.d_rtk_pumps_2_down_scale = scale == nil and 1 or scale
+	self.d_rtk_pumps_2_down_scale = scale == nil and 255 or scale
 	self.d_rtk_pumps_2_down = iDataRef:New(dpath)
 end
 
@@ -1140,10 +1154,10 @@ end
 -- ========
 -- output RTK PUMPS_1_DOWN (output/40/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetRtkPumps1Down(dpath, scale)
-	self.d_rtk_pumps_1_down_scale = scale == nil and 1 or scale
+	self.d_rtk_pumps_1_down_scale = scale == nil and 255 or scale
 	self.d_rtk_pumps_1_down = iDataRef:New(dpath)
 end
 
@@ -1165,10 +1179,10 @@ end
 -- ========
 -- output RTK PUMPS_2_UP (output/41/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetRtkPumps2Up(dpath, scale)
-	self.d_rtk_pumps_2_up_scale = scale == nil and 1 or scale
+	self.d_rtk_pumps_2_up_scale = scale == nil and 255 or scale
 	self.d_rtk_pumps_2_up = iDataRef:New(dpath)
 end
 
@@ -1190,10 +1204,10 @@ end
 -- ========
 -- output X FEED_UP (output/42/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetXFeedUp(dpath, scale)
-	self.d_x_feed_up_scale = scale == nil and 1 or scale
+	self.d_x_feed_up_scale = scale == nil and 255 or scale
 	self.d_x_feed_up = iDataRef:New(dpath)
 end
 
@@ -1215,10 +1229,10 @@ end
 -- ========
 -- output X FEED_DOWN (output/43/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetXFeedDown(dpath, scale)
-	self.d_x_feed_down_scale = scale == nil and 1 or scale
+	self.d_x_feed_down_scale = scale == nil and 255 or scale
 	self.d_x_feed_down = iDataRef:New(dpath)
 end
 
@@ -1240,10 +1254,10 @@ end
 -- ========
 -- output MASTER SW_UP (output/44/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetMasterSwUp(dpath, scale)
-	self.d_master_sw_up_scale = scale == nil and 1 or scale
+	self.d_master_sw_up_scale = scale == nil and 255 or scale
 	self.d_master_sw_up = iDataRef:New(dpath)
 end
 
@@ -1265,10 +1279,10 @@ end
 -- ========
 -- output MASTER SW_DOWN (output/45/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetMasterSwDown(dpath, scale)
-	self.d_master_sw_down_scale = scale == nil and 1 or scale
+	self.d_master_sw_down_scale = scale == nil and 255 or scale
 	self.d_master_sw_down = iDataRef:New(dpath)
 end
 
@@ -1290,10 +1304,10 @@ end
 -- ========
 -- output START_UP (output/46/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
 function KayeRoof:GetStartUp(dpath, scale)
-	self.d_start_up_scale = scale == nil and 1 or scale
+	self.d_start_up_scale = scale == nil and 255 or scale
 	self.d_start_up = iDataRef:New(dpath)
 end
 
@@ -1313,62 +1327,40 @@ function KayeRoof:FreshStartUp()
 end
 
 -- ========
--- output BAT1V (output/47/state)
+-- output BAT1V + BAT2V (output/47 + output/48)
+-- mfproj one Output Device "BAT2V|BAT1V" (two pins, same value; not LedModule)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (default Get* scale=255 → digital 0/255)
 
-function KayeRoof:GetBat1v(dpath, scale)
-	self.d_bat1v_scale = scale == nil and 1 or scale
-	self.d_bat1v = iDataRef:New(dpath)
+function KayeRoof:GetBat1v2(dpath, scale)
+	self.d_bat1v2_scale = scale == nil and 255 or scale
+	self.d_bat1v2 = iDataRef:New(dpath)
 end
 
-function KayeRoof:SetBat1v(val)
+function KayeRoof:SetBat1v2(val)
 	if val == nil then
-		val = self.d_bat1v:Get() * self.d_bat1v_scale
-		if self.d_bat1v:ChangedUpdate() then
+		val = self.d_bat1v2:Get() * self.d_bat1v2_scale
+		if self.d_bat1v2:ChangedUpdate() then
 			uluaSet(_G.idr_kayeroof_mf_output_bat1v, val)
-		end
-	else
-		uluaSet(_G.idr_kayeroof_mf_output_bat1v, val)
-	end
-end
-
-function KayeRoof:FreshBat1v()
-	self.d_bat1v:Invalid(-1)
-end
-
--- ========
--- output BAT2V (output/48/state)
-
--- Channel state is 0/1 (bitLength=1 in mfcfg)
-
-function KayeRoof:GetBat2v(dpath, scale)
-	self.d_bat2v_scale = scale == nil and 1 or scale
-	self.d_bat2v = iDataRef:New(dpath)
-end
-
-function KayeRoof:SetBat2v(val)
-	if val == nil then
-		val = self.d_bat2v:Get() * self.d_bat2v_scale
-		if self.d_bat2v:ChangedUpdate() then
 			uluaSet(_G.idr_kayeroof_mf_output_bat2v, val)
 		end
 	else
+		uluaSet(_G.idr_kayeroof_mf_output_bat1v, val)
 		uluaSet(_G.idr_kayeroof_mf_output_bat2v, val)
 	end
 end
 
-function KayeRoof:FreshBat2v()
-	self.d_bat2v:Invalid(-1)
+function KayeRoof:FreshBat1v2()
+	self.d_bat1v2:Invalid(-1)
 end
 
 -- ========
 -- output BACKLIGHT (output/49/state)
 
--- Channel state is 0/1 (bitLength=1 in mfcfg)
+-- Channel state 0–255 ↔ kSetPin (0=LOW, 255=HIGH, 1–254=PWM)
 
 function KayeRoof:GetBacklight(dpath, scale)
-	self.d_backlight_scale = scale == nil and 1 or scale
+	self.d_backlight_scale = scale == nil and 255 or scale
 	self.d_backlight = iDataRef:New(dpath)
 end
 
