@@ -1,4 +1,5 @@
 {
+  "$schema": "./mobiflight-config.schema.json",
   "ProductName": "CfMega",
   "ModuleName": "MF Mega Pro",
   "ModuleSerial": "SN-3F1-FDD",
@@ -12,6 +13,14 @@
     }
   },
   "inputs": {
+    "AnalogInput": {
+      "Axis": [
+        {
+          "Name": "G1000 analog",
+          "MapToBit": 10
+        }
+      ]
+    },
     "Encoder": {
       "Encoder_small": [
         {

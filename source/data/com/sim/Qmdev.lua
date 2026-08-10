@@ -181,6 +181,96 @@ function Qmdev:CfgRpn(KeyIdx, RpnPressStr, RpnReleaseStr)
     -- uluaLog(self.QmdevId ..', ' .. RpnPressStr.. ', '.. RpnReleaseStr)
 end
 
+-- MF AnalogInput: hub writes ADC into keysmap[MapToBit]; PollAnalogs() maps in Lua.
+-- @KeyIdx: (number) keysmap index (JSON MapToBit)
+-- @storeRpn: (string) MSFS write op e.g. '(>L:A_WR_GAIN)'; XP: dataref path for uluaSet
+-- @baseline, @scale: (number) value = (baseline - adc) / scale
+-- @clampLo, @clampHi: (number, optional) clamp to [lo, hi]; default 0, 1
+-- @postOffset: (number, optional) subtract after scale; default 0
+--   Example: CfgAnalog(0, '(>L:FOO)', 220, 219)
+-- No return value.
+function Qmdev:CfgAnalog(KeyIdx, storeRpn, baseline, scale, clampLo, clampHi, postOffset)
+    if type(storeRpn) ~= 'string' or storeRpn == '' then
+        uluaLog('CfgAnalog: storeRpn must be a non-empty string for bit ' .. tostring(KeyIdx))
+        return
+    end
+    if type(baseline) ~= 'number' or type(scale) ~= 'number' then
+        uluaLog('CfgAnalog: baseline/scale must be numbers for bit ' .. tostring(KeyIdx))
+        return
+    end
+    if scale == 0 then
+        uluaLog('CfgAnalog: scale must be non-zero for bit ' .. tostring(KeyIdx))
+        return
+    end
+    clampLo = clampLo == nil and 0 or clampLo
+    clampHi = clampHi == nil and 1 or clampHi
+    postOffset = postOffset == nil and 0 or postOffset
+    if type(clampLo) ~= 'number' or type(clampHi) ~= 'number' then
+        uluaLog('CfgAnalog: clampLo/clampHi must be numbers for bit ' .. tostring(KeyIdx))
+        return
+    end
+    if type(postOffset) ~= 'number' then
+        uluaLog('CfgAnalog: postOffset must be a number for bit ' .. tostring(KeyIdx))
+        return
+    end
+    if self.Analogs == nil then
+        self.Analogs = {}
+    end
+    -- keysmap board id = class name (MF ProductName); optional self.ProductName override
+    local board = self.ProductName
+    if board == nil or board == '' then
+        board = self:getClassName()
+    end
+    local path = 'cpuwolf/flyluaio/' .. board .. '/keysmap[' .. tostring(KeyIdx) .. ']'
+    local dr = iDataRef:New(path)
+    if dr == nil then
+        uluaLog('CfgAnalog: missing ' .. path)
+        return
+    end
+    local entry = {
+        dr = dr,
+        store = storeRpn,
+        baseline = baseline,
+        scale = scale,
+        lo = clampLo,
+        hi = clampHi,
+        postOffset = postOffset,
+    }
+    -- XP: resolve dataref once at cfg time (uluaFind is too slow for FrameLoop)
+    if uluaCmdBegin ~= nil then
+        entry.storeDr = uluaFind(storeRpn)
+        if entry.storeDr == nil then
+            uluaLog('CfgAnalog: missing store ' .. storeRpn)
+            return
+        end
+    end
+    self.Analogs[#self.Analogs + 1] = entry
+end
+
+-- Apply pending AnalogInput changes (Lua math; write final value only).
+-- No return value.
+function Qmdev:PollAnalogs()
+    if self.Analogs == nil then
+        return
+    end
+    for i = 1, #self.Analogs do
+        local a = self.Analogs[i]
+        if a.dr:ChangedUpdate() then
+            local v = (a.baseline - a.dr:Get()) / a.scale - a.postOffset
+            if v < a.lo then
+                v = a.lo
+            elseif v > a.hi then
+                v = a.hi
+            end
+            if uluaCmdBegin == nil then
+                uluaWriteCmd(tostring(v) .. ' ' .. a.store)
+            else
+                uluaSet(a.storeDr, v)
+            end
+        end
+    end
+end
+
 -- uluaQmdevConfig(2, 'ASSIGN;6;"laminar/B738/autopilot/change_over_press"')
 -- @KeyIdx: (number) Key index
 -- @CmdPressStr: (string) Command string for key press

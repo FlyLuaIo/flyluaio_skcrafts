@@ -39,6 +39,10 @@ function RfA112:Init(FastTurnsPerSecond)
 	return true
 end
 
+function RfA112.Open(...)
+	return com.sim.Qmdev.Open(RfA112, ...)
+end
+
 -- ========
 -- output MIP-LT (output/0/state)
 
