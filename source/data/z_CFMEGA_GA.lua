@@ -14,7 +14,7 @@ uluaLog('MobiFlight CfMega for GA')
 
 ---- G1000 analog (AnalogInput Axis / MapToBit 10 → 0..1 brightness)
 -- (0 - adc) / -1023 = adc/1023; clamp default [0,1]
-cfmega:CfgAnalog(10, 'sim/cockpit/electrical/instrument_brightness', 0, -800)
+cfmega:CfgAnalog(10, 'sim/cockpit/electrical/instrument_brightness', 0, -1023)
 
 ---- G1000 FMS inner
 -- inner
