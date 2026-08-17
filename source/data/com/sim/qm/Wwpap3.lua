@@ -1,4 +1,3 @@
-
 -- *****************************************************************
 -- Don't modify this file, unless you know what you are doing
 -- Most of the code are auto generated
@@ -57,6 +56,8 @@ function Wwpap3:init()
 			self.LEDS_MAFO,
 			self.LEDS_ATSOL
 		}
+		self._lcdInited = false
+		self._lastLcdPayload = nil
 	end
 end
 
@@ -64,6 +65,19 @@ function Wwpap3:absent(FastTurnsPerSecond)
 	if not uluaFind('cpuwolf/flyluaio/WwPap3/leds/ledCmd') then
 		return true
 	end
+	return false
+end
+
+function Wwpap3:Init(FastTurnsPerSecond)
+	local ftps = FastTurnsPerSecond == nil and self.FastTurnsPerSecond or FastTurnsPerSecond
+	if self:absent(ftps) then
+		return false
+	end
+	if _G.ilua_hw_assigned_wwpap3 == 1 then
+		return false
+	end
+	_G.ilua_hw_assigned_wwpap3 = 1
+	--init
 	_G.idr_wwpap3_hid_leds_ledcmd = uluaFind('cpuwolf/flyluaio/WwPap3/leds/ledCmd')
 	_G.idr_wwpap3_hid_init_seqnum = uluaFind('cpuwolf/flyluaio/WwPap3/init/seqNum')
 	_G.idr_wwpap3_hid_lcd_seqnum = uluaFind('cpuwolf/flyluaio/WwPap3/lcd/seqNum')
@@ -77,21 +91,16 @@ function Wwpap3:absent(FastTurnsPerSecond)
 	_G.idr_wwpap3_hid_lcd_lcd8 = uluaFind('cpuwolf/flyluaio/WwPap3/lcd/lcd8')
 	_G.idr_wwpap3_hid_empty_seqnum = uluaFind('cpuwolf/flyluaio/WwPap3/empty/seqNum')
 	_G.idr_wwpap3_hid_finish_seqnum = uluaFind('cpuwolf/flyluaio/WwPap3/finish/seqNum')
+	_G.idr_wwpap3_hid_config_value = uluaFind('cpuwolf/flyluaio/WwPap3/config/configValue')
 	_G.idr_wwpap3_hid_invalid = uluaFind('cpuwolf/flyluaio/WwPap3/invalid')
 	_G.idr_wwpap3_hid_fastkeypersec = uluaFind('cpuwolf/flyluaio/WwPap3/fastkeypersec')
-	uluaSet(_G.idr_wwpap3_hid_fastkeypersec, FastTurnsPerSecond)
-	return false
-end
-
-function Wwpap3:Init(FastTurnsPerSecond)
-	local ftps = FastTurnsPerSecond == nil and self.FastTurnsPerSecond or FastTurnsPerSecond
-	if self:absent(ftps) then
-		return false
-	end
-	if _G.ilua_hw_assigned_wwpap3 == 1 then
-		return false
-	end
-	_G.ilua_hw_assigned_wwpap3 = 1
+	uluaSet(_G.idr_wwpap3_hid_fastkeypersec, ftps)
+	self:sendDeviceConfig()
+	self:ensureLcdInit()
+	self:SetBkl(0, 0)
+	self:SetLcdBkl(0, 0)
+	self:SetLedBkl(0, 0)
+	self:clearMcpDisplay()
 	return true
 end
 
@@ -99,8 +108,31 @@ function Wwpap3.Open(...)
 	return com.sim.Qmdev.Open(Wwpap3, ...)
 end
 
+-- ========
+-- Device Config (PAP3-MCP firmware configuration)
+-- Standard config sequence: 4 frames with device-specific parameters
+-- Sequence must be sent BEFORE LCD init frame
+-- ========
+function Wwpap3:SendConfigParam(configType, deviceParam, configValue)
+	local val = configValue * 256 * 256 + deviceParam * 256 + configType
+	uluaSet(_G.idr_wwpap3_hid_config_value, val)
+end
+
+function Wwpap3:sendDeviceConfig()
+	self:SendConfigParam(0x01, 0x00, 0x00)
+	self:SendConfigParam(0x01, 0x01, 0x00)
+	self:SendConfigParam(0x01, 0x02, 0x00)
+	self:SendConfigParam(0x01, 0x03, 0x00)
+	-- 时间间隔 ~4ms，在 absent() 中依次发送
+	self:SendConfigParam(0x04, 0x05, 0x9C)
+	self:SendConfigParam(0x04, 0x05, 0xA0)
+	self:SendConfigParam(0x04, 0x05, 0xA4)
+	self:SendConfigParam(0x04, 0x05, 0x04)
+	self:SendConfigParam(0x01, 0x18, 0x00)
+end
+
 function Wwpap3:SendLedCmd(LedId, value)
-	local combinedValue = (LedId * 256) + value
+	local combinedValue = (value * 256) + LedId
 	uluaSet(_G.idr_wwpap3_hid_leds_ledcmd, combinedValue)
 end
 
@@ -119,31 +151,58 @@ end
 
 -- ========
 -- LEDS BKL
-function Wwpap3:GetBkl(dpath, revert, base)
-	self:GetBit(self.LEDS_BKL, dpath, revert, base)
+function Wwpap3:GetBkl(dpath, scale)
+	self.d_bkl_scale = scale == nil and 30 or scale
+	self.d_bkl = iDataRef:New(dpath)
 end
 
 function Wwpap3:SetBkl(valbase, val)
-	self:SendBit(self.LEDS_BKL, valbase, val)
+	if val == nil then
+		if self.d_bkl:ChangedUpdate() then
+			val = self.d_bkl:GetOld() * self.d_bkl_scale
+			self:SendLedCmd(self.LEDS_BKL, val)
+		end
+	else
+		self:SendLedCmd(self.LEDS_BKL, val)
+	end
 end
+
 -- ========
 -- LEDS LCDBKL
-function Wwpap3:GetLcdBkl(dpath, revert, base)
-	self:GetBit(self.LEDS_LCDBKL, dpath, revert, base)
+function Wwpap3:GetLcdBkl(dpath, scale)
+	self.d_lcdbkl_scale = scale == nil and 180 or scale
+	self.d_lcdbkl = iDataRef:New(dpath)
 end
 
 function Wwpap3:SetLcdBkl(valbase, val)
-	self:SendBit(self.LEDS_LCDBKL, valbase, val)
+	if val == nil then
+		if self.d_lcdbkl:ChangedUpdate() then
+			val = self.d_lcdbkl:GetOld() * self.d_lcdbkl_scale
+			self:SendLedCmd(self.LEDS_LCDBKL, val)
+		end
+	else
+		self:SendLedCmd(self.LEDS_LCDBKL, val)
+	end
 end
+
 -- ========
 -- LEDS LEDBKL
-function Wwpap3:GetLedBkl(dpath, revert, base)
-	self:GetBit(self.LEDS_LEDBKL, dpath, revert, base)
+function Wwpap3:GetLedBkl(dpath, scale)
+	self.d_ledbkl_scale = scale == nil and 180 or scale
+	self.d_ledbkl = iDataRef:New(dpath)
 end
 
 function Wwpap3:SetLedBkl(valbase, val)
-	self:SendBit(self.LEDS_LEDBKL, valbase, val)
+	if val == nil then
+		if self.d_ledbkl:ChangedUpdate() then
+			val = self.d_ledbkl:GetOld() * self.d_ledbkl_scale
+			self:SendLedCmd(self.LEDS_LEDBKL, val ~= 0 and 255 or 0)
+		end
+	else
+		self:SendLedCmd(self.LEDS_LEDBKL, val ~= 0 and 255 or 0)
+	end
 end
+
 -- ========
 -- LEDS N1
 function Wwpap3:GetN1(dpath, revert, base)
@@ -153,6 +212,7 @@ end
 function Wwpap3:SetN1(valbase, val)
 	self:SendBit(self.LEDS_N1, valbase, val)
 end
+
 -- ========
 -- LEDS SPEED
 function Wwpap3:GetSpeed(dpath, revert, base)
@@ -162,6 +222,7 @@ end
 function Wwpap3:SetSpeed(valbase, val)
 	self:SendBit(self.LEDS_SPEED, valbase, val)
 end
+
 -- ========
 -- LEDS VNAV
 function Wwpap3:GetVnav(dpath, revert, base)
@@ -171,6 +232,7 @@ end
 function Wwpap3:SetVnav(valbase, val)
 	self:SendBit(self.LEDS_VNAV, valbase, val)
 end
+
 -- ========
 -- LEDS LVLCHG
 function Wwpap3:GetLvlChg(dpath, revert, base)
@@ -180,6 +242,7 @@ end
 function Wwpap3:SetLvlChg(valbase, val)
 	self:SendBit(self.LEDS_LVLCHG, valbase, val)
 end
+
 -- ========
 -- LEDS HDGSEL
 function Wwpap3:GetHdgSel(dpath, revert, base)
@@ -189,6 +252,7 @@ end
 function Wwpap3:SetHdgSel(valbase, val)
 	self:SendBit(self.LEDS_HDGSEL, valbase, val)
 end
+
 -- ========
 -- LEDS LNAV
 function Wwpap3:GetLnav(dpath, revert, base)
@@ -198,6 +262,7 @@ end
 function Wwpap3:SetLnav(valbase, val)
 	self:SendBit(self.LEDS_LNAV, valbase, val)
 end
+
 -- ========
 -- LEDS VORLOC
 function Wwpap3:GetVorLoc(dpath, revert, base)
@@ -207,6 +272,7 @@ end
 function Wwpap3:SetVorLoc(valbase, val)
 	self:SendBit(self.LEDS_VORLOC, valbase, val)
 end
+
 -- ========
 -- LEDS APP
 function Wwpap3:GetApp(dpath, revert, base)
@@ -216,6 +282,7 @@ end
 function Wwpap3:SetApp(valbase, val)
 	self:SendBit(self.LEDS_APP, valbase, val)
 end
+
 -- ========
 -- LEDS ALTHLD
 function Wwpap3:GetAltHld(dpath, revert, base)
@@ -225,6 +292,7 @@ end
 function Wwpap3:SetAltHld(valbase, val)
 	self:SendBit(self.LEDS_ALTHLD, valbase, val)
 end
+
 -- ========
 -- LEDS VS
 function Wwpap3:GetVs(dpath, revert, base)
@@ -234,6 +302,7 @@ end
 function Wwpap3:SetVs(valbase, val)
 	self:SendBit(self.LEDS_VS, valbase, val)
 end
+
 -- ========
 -- LEDS CMDA
 function Wwpap3:GetCmdA(dpath, revert, base)
@@ -243,6 +312,7 @@ end
 function Wwpap3:SetCmdA(valbase, val)
 	self:SendBit(self.LEDS_CMDA, valbase, val)
 end
+
 -- ========
 -- LEDS CWSA
 function Wwpap3:GetCwsA(dpath, revert, base)
@@ -252,6 +322,7 @@ end
 function Wwpap3:SetCwsA(valbase, val)
 	self:SendBit(self.LEDS_CWSA, valbase, val)
 end
+
 -- ========
 -- LEDS CMDB
 function Wwpap3:GetCmdB(dpath, revert, base)
@@ -261,6 +332,7 @@ end
 function Wwpap3:SetCmdB(valbase, val)
 	self:SendBit(self.LEDS_CMDB, valbase, val)
 end
+
 -- ========
 -- LEDS CWSB
 function Wwpap3:GetCwsB(dpath, revert, base)
@@ -270,6 +342,7 @@ end
 function Wwpap3:SetCwsB(valbase, val)
 	self:SendBit(self.LEDS_CWSB, valbase, val)
 end
+
 -- ========
 -- LEDS ATARM
 function Wwpap3:GetAtArm(dpath, revert, base)
@@ -279,6 +352,7 @@ end
 function Wwpap3:SetAtArm(valbase, val)
 	self:SendBit(self.LEDS_ATARM, valbase, val)
 end
+
 -- ========
 -- LEDS MACAPT
 function Wwpap3:GetMaCapt(dpath, revert, base)
@@ -288,6 +362,7 @@ end
 function Wwpap3:SetMaCapt(valbase, val)
 	self:SendBit(self.LEDS_MACAPT, valbase, val)
 end
+
 -- ========
 -- LEDS MAFO
 function Wwpap3:GetMaFo(dpath, revert, base)
@@ -297,6 +372,7 @@ end
 function Wwpap3:SetMaFo(valbase, val)
 	self:SendBit(self.LEDS_MAFO, valbase, val)
 end
+
 -- ========
 -- LEDS ATSOL
 function Wwpap3:GetAtSol(dpath, revert, base)
@@ -353,8 +429,16 @@ local function pap3_clamp(v, lo, hi)
 end
 
 local PAP3_DIGIT = {
-	[0] = 0x3F, [1] = 0x06, [2] = 0x5B, [3] = 0x4F, [4] = 0x66,
-	[5] = 0x6D, [6] = 0x7D, [7] = 0x07, [8] = 0x7F, [9] = 0x6F
+	[0] = 0x3F,
+	[1] = 0x06,
+	[2] = 0x5B,
+	[3] = 0x4F,
+	[4] = 0x66,
+	[5] = 0x6D,
+	[6] = 0x7D,
+	[7] = 0x07,
+	[8] = 0x7F,
+	[9] = 0x6F
 }
 local PAP3_A, PAP3_B, PAP3_C = 0x01, 0x02, 0x04
 local PAP3_D, PAP3_E, PAP3_F, PAP3_G = 0x08, 0x10, 0x20, 0x40
@@ -401,8 +485,23 @@ local function pap3_pack32(payload)
 	return out
 end
 
+function Wwpap3:_lcdPayloadEquals(payload)
+	local last = self._lastLcdPayload
+	if not last then return false end
+	for i = 1, 32 do
+		if (payload[i] or 0) ~= (last[i] or 0) then return false end
+	end
+	return true
+end
+
 function Wwpap3:sendRawLcdPayload(payload)
-	self:ensureLcdInit()
+	-- 如果 payload 没有变化，跳过发送（节流）
+	if self:_lcdPayloadEquals(payload) then
+		return
+	end
+	self._lastLcdPayload = payload
+
+	-- self:ensureLcdInit()
 	local words = pap3_pack32(payload)
 	uluaSet(_G.idr_wwpap3_hid_lcd_lcd1, words[1])
 	uluaSet(_G.idr_wwpap3_hid_lcd_lcd2, words[2])
@@ -563,6 +662,28 @@ function Wwpap3:setMcpDisplay(data)
 	end
 
 	self:sendRawLcdPayload(p)
+end
+
+function Wwpap3:clearMcpDisplay()
+	self:setMcpDisplay({
+		displayEnabled = false,
+		displayTest = false,
+		showLabels = false,
+		showCourse = true,
+		speed = 0,
+		spdMach = false,
+		speedVisible = false,
+		heading = 0,
+		headingVisible = true,
+		altitude = 0,
+		altitudeVisible = true,
+		verticalSpeed = 0,
+		verticalSpeedVisible = false,
+		crsCapt = 0,
+		crsFo = 0,
+		digitA = false,
+		digitB = false,
+	})
 end
 
 return Wwpap3

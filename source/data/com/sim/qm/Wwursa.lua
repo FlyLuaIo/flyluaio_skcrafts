@@ -1,4 +1,3 @@
-
 -- *****************************************************************
 -- Don't modify this file, unless you know what you are doing
 -- Most of the code are auto generated
@@ -14,7 +13,7 @@ function Wwursa:init()
 		self.LcdText = nil
 		_G.ilua_hw_assigned_wwursa = 0
 		self.LEDS_BKL = 0
-		self.LEDS_MAKER = 2
+		self.LEDS_OVERALLBKL = 2 -- OVERALL_LEDS_AND_LCD_BRIGHTNESS master gate (JSON name "Maker")
 		self.LEDS_FAULT1 = 3
 		self.LEDS_FIRE1 = 4
 		self.LEDS_FAULT2 = 5
@@ -23,19 +22,13 @@ function Wwursa:init()
 		self.LEDS_VIBR = 16
 		self.ledIds = {
 			self.LEDS_BKL,
-			self.LEDS_MAKER,
+			self.LEDS_OVERALLBKL,
 			self.LEDS_FAULT1,
 			self.LEDS_FIRE1,
 			self.LEDS_FAULT2,
 			self.LEDS_FIRE2,
 			self.LEDS_VIBL,
 			self.LEDS_VIBR
-		}
-		self.PAC_BKL = 0
-		self.PAC_LCDBKL = 2
-		self.ledIds = {
-			self.PAC_BKL,
-			self.PAC_LCDBKL
 		}
 	end
 end
@@ -55,6 +48,7 @@ function Wwursa:absent(FastTurnsPerSecond)
 	_G.idr_wwursa_hid_lcd_lcd6 = uluaFind('cpuwolf/flyluaio/WwUrsa/lcd/lcd6')
 	_G.idr_wwursa_hid_lcd_lcd7 = uluaFind('cpuwolf/flyluaio/WwUrsa/lcd/lcd7')
 	_G.idr_wwursa_hid_lcd_lcd8 = uluaFind('cpuwolf/flyluaio/WwUrsa/lcd/lcd8')
+	_G.idr_wwursa_hid_lcd_lcd9 = uluaFind('cpuwolf/flyluaio/WwUrsa/lcd/lcd9')
 	_G.idr_wwursa_hid_finish_seqnum = uluaFind('cpuwolf/flyluaio/WwUrsa/finish/seqNum')
 	_G.idr_wwursa_hid_invalid = uluaFind('cpuwolf/flyluaio/WwUrsa/invalid')
 	_G.idr_wwursa_hid_fastkeypersec = uluaFind('cpuwolf/flyluaio/WwUrsa/fastkeypersec')
@@ -71,6 +65,7 @@ function Wwursa:Init(FastTurnsPerSecond)
 		return false
 	end
 	_G.ilua_hw_assigned_wwursa = 1
+	self:setLcdText('  ')
 	return true
 end
 
@@ -79,13 +74,17 @@ function Wwursa.Open(...)
 end
 
 function Wwursa:SendLedCmdPac(LedId, value)
-	local combinedValue = (LedId * 256) + value
+	value = math.floor(value)
+	if value < 0 then value = 0 elseif value > 255 then value = 255 end
+	local combinedValue = (value * 256) + LedId
 	uluaSet(_G.idr_wwursa_hid_pac_ledcmd, combinedValue)
 end
 
 -- Throttle leds; dimming channels (<3) also mirror to PAC (WINCTRL setLedBrightness)
 function Wwursa:SendLedCmd(LedId, value)
-	local combinedValue = (LedId * 256) + value
+	value = math.floor(value)
+	if value < 0 then value = 0 elseif value > 255 then value = 255 end
+	local combinedValue = (value * 256) + LedId
 	uluaSet(_G.idr_wwursa_hid_leds_ledcmd, combinedValue)
 	if LedId < 3 then
 		self:SendLedCmdPac(LedId, value)
@@ -113,16 +112,27 @@ function Wwursa:Next()
 end
 
 -- PAC trim LCD (WINCTRL product-ursa-minor-throttle::setLCDText)
--- rowOffsets {53,49,45,41,37,33,29,25,57} → lcd1..lcd8 (dot on lcd8); digitBits 0..3
+-- rowOffsets {53,49,45,41,37,33,29,25,57} → lcd1..lcd9 (dot on lcd8, bit8 on lcd9); digitBits 0..3
 function Wwursa:setLcdText(text)
 	text = tostring(text or '')
 	if text == self.LcdText then return end
 	self.LcdText = text
 
 	local segmap = {
-		['0'] = 0x3F, ['1'] = 0x06, ['2'] = 0x5B, ['3'] = 0x4F, ['4'] = 0x66,
-		['5'] = 0x6D, ['6'] = 0x7D, ['7'] = 0x07, ['8'] = 0x7F, ['9'] = 0x6F,
-		['A'] = 0x77, ['L'] = 0x38, [' '] = 0x00, ['-'] = 0x40
+		['0'] = 0x3F,
+		['1'] = 0x06,
+		['2'] = 0x5B,
+		['3'] = 0x4F,
+		['4'] = 0x66,
+		['5'] = 0x6D,
+		['6'] = 0x7D,
+		['7'] = 0x07,
+		['8'] = 0x7F,
+		['9'] = 0x6F,
+		['A'] = 0x77,
+		['L'] = 0x38,
+		[' '] = 0x00,
+		['-'] = 0x40
 	}
 
 	local charsOnly = ''
@@ -151,8 +161,8 @@ function Wwursa:setLcdText(text)
 	while #charsOnly < 4 do charsOnly = charsOnly .. ' ' end
 	if #charsOnly > 4 then charsOnly = charsOnly:sub(1, 4) end
 
-	-- planes[1..7]=segments A-G, planes[8]=dots (segIndex 7 → byte 25)
-	local planes = { 0, 0, 0, 0, 0, 0, 0, 0 }
+	-- planes[1..7]=segments A-G, planes[8]=dots, planes[9]=mask bit 8 (byte 57)
+	local planes = { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 	for dig = 0, 3 do
 		local mask = segmap[charsOnly:sub(dig + 1, dig + 1)] or 0
 		for seg = 0, 6 do
@@ -162,6 +172,9 @@ function Wwursa:setLcdText(text)
 		end
 		if bit.band(bit.rshift(dotsMask, dig), 1) ~= 0 then
 			planes[8] = bit.bor(planes[8], bit.lshift(1, dig))
+		end
+		if bit.band(mask, 0x100) ~= 0 then
+			planes[9] = bit.bor(planes[9], bit.lshift(1, dig))
 		end
 	end
 
@@ -174,6 +187,7 @@ function Wwursa:setLcdText(text)
 	uluaSet(_G.idr_wwursa_hid_lcd_lcd6, planes[6])
 	uluaSet(_G.idr_wwursa_hid_lcd_lcd7, planes[7])
 	uluaSet(_G.idr_wwursa_hid_lcd_lcd8, planes[8])
+	uluaSet(_G.idr_wwursa_hid_lcd_lcd9, planes[9])
 	uluaSet(_G.idr_wwursa_hid_lcd_seqnum, pc)
 	uluaSet(_G.idr_wwursa_hid_finish_seqnum, pc)
 end
@@ -183,28 +197,57 @@ function Wwursa:formatTrimText(trim, test)
 	trim = tonumber(trim) or 0
 	local v = math.floor(math.abs(trim) * 10 + 0.5) / 10
 	local side = (trim < 0) and 'L' or 'R'
-	local gap = (v < 10) and ' ' or ''
-	return string.format('%s%s%.1f', side, gap, v)
+	if v < 10 then
+		return string.format('%s%.1f', side, v)
+	else
+		return string.format('%s%d.', side, math.floor(v))
+	end
 end
 
 -- ========
--- LEDS BKL
-function Wwursa:GetBkl(dpath, revert, base)
-	self:GetBit(self.LEDS_BKL, dpath, revert, base)
+-- Backlight (dimmable, LedId < 3 mirrors to PAC via SendLedCmd)
+function Wwursa:GetBkl(dpath, scale)
+	self.d_bkl_scale = scale == nil and 30 or scale
+	self.d_bkl = iDataRef:New(dpath)
 end
 
-function Wwursa:SetBkl(valbase, val)
-	self:SendBit(self.LEDS_BKL, valbase, val)
+function Wwursa:SetBkl(val)
+	if val == nil then
+		if self.d_bkl:ChangedUpdate() then
+			val = self.d_bkl:GetOld() * self.d_bkl_scale
+			self:SendLedCmd(self.LEDS_BKL, val)
+		end
+	else
+		self:SendLedCmd(self.LEDS_BKL, val)
+	end
 end
+
+function Wwursa:FreshBkl()
+	self.d_bkl:Invalid(-1)
+end
+
 -- ========
--- LEDS MAKER
-function Wwursa:GetMaker(dpath, revert, base)
-	self:GetBit(self.LEDS_MAKER, dpath, revert, base)
+-- Overall brightness master gate (dimmable, LedId < 3 mirrors to PAC via SendLedCmd)
+function Wwursa:GetOverallBkl(dpath, scale)
+	self.d_ovb_scale = scale == nil and 30 or scale
+	self.d_ovb = iDataRef:New(dpath)
 end
 
-function Wwursa:SetMaker(valbase, val)
-	self:SendBit(self.LEDS_MAKER, valbase, val)
+function Wwursa:SetOverallBkl(val)
+	if val == nil then
+		if self.d_ovb:ChangedUpdate() then
+			val = self.d_ovb:GetOld() * self.d_ovb_scale
+			self:SendLedCmd(self.LEDS_OVERALLBKL, val ~= 0 and 255 or 0)
+		end
+	else
+		self:SendLedCmd(self.LEDS_OVERALLBKL, val ~= 0 and 255 or 0)
+	end
 end
+
+function Wwursa:FreshOverallBkl()
+	self.d_ovb:Invalid(-1)
+end
+
 -- ========
 -- LEDS FAULT1
 function Wwursa:GetFault1(dpath, revert, base)
@@ -214,6 +257,7 @@ end
 function Wwursa:SetFault1(valbase, val)
 	self:SendBit(self.LEDS_FAULT1, valbase, val)
 end
+
 -- ========
 -- LEDS FIRE1
 function Wwursa:GetFire1(dpath, revert, base)
@@ -223,6 +267,7 @@ end
 function Wwursa:SetFire1(valbase, val)
 	self:SendBit(self.LEDS_FIRE1, valbase, val)
 end
+
 -- ========
 -- LEDS FAULT2
 function Wwursa:GetFault2(dpath, revert, base)
@@ -232,6 +277,7 @@ end
 function Wwursa:SetFault2(valbase, val)
 	self:SendBit(self.LEDS_FAULT2, valbase, val)
 end
+
 -- ========
 -- LEDS FIRE2
 function Wwursa:GetFire2(dpath, revert, base)
@@ -241,56 +287,57 @@ end
 function Wwursa:SetFire2(valbase, val)
 	self:SendBit(self.LEDS_FIRE2, valbase, val)
 end
+
 -- ========
--- LEDS VIBL
-function Wwursa:GetVibL(dpath, revert, base)
-	self:GetBit(self.LEDS_VIBL, dpath, revert, base)
+-- LEDS VIBL (dimmable 0-255)
+function Wwursa:GetVibL(dpath, scale)
+	self.d_vibl_scale = scale == nil and 1 or scale
+	self.d_vibl = iDataRef:New(dpath)
 end
 
-function Wwursa:SetVibL(valbase, val)
-	self:SendBit(self.LEDS_VIBL, valbase, val)
-end
--- ========
--- LEDS VIBR
-function Wwursa:GetVibR(dpath, revert, base)
-	self:GetBit(self.LEDS_VIBR, dpath, revert, base)
+function Wwursa:SetVibL(val)
+	if val == nil then
+		if self.d_vibl:ChangedUpdate() then
+			val = self.d_vibl:GetOld() * self.d_vibl_scale
+			self:SendLedCmd(self.LEDS_VIBL, val)
+		end
+	else
+		self:SendLedCmd(self.LEDS_VIBL, val)
+	end
 end
 
-function Wwursa:SetVibR(valbase, val)
-	self:SendBit(self.LEDS_VIBR, valbase, val)
+function Wwursa:FreshVibL()
+	self.d_vibl:Invalid(-1)
+end
+
+-- ========
+-- LEDS VIBR (dimmable 0-255)
+function Wwursa:GetVibR(dpath, scale)
+	self.d_vibr_scale = scale == nil and 1 or scale
+	self.d_vibr = iDataRef:New(dpath)
+end
+
+function Wwursa:SetVibR(val)
+	if val == nil then
+		if self.d_vibr:ChangedUpdate() then
+			val = self.d_vibr:GetOld() * self.d_vibr_scale
+			self:SendLedCmd(self.LEDS_VIBR, val)
+		end
+	else
+		self:SendLedCmd(self.LEDS_VIBR, val)
+	end
+end
+
+function Wwursa:FreshVibR()
+	self.d_vibr:Invalid(-1)
 end
 
 function Wwursa:Setleds(valbase, val)
-	self:SetBkl(valbase, val)
-	self:SetMaker(valbase, val)
+	-- Boolean LEDs: standard SendBit path
 	self:SetFault1(valbase, val)
 	self:SetFire1(valbase, val)
 	self:SetFault2(valbase, val)
 	self:SetFire2(valbase, val)
-	self:SetVibL(valbase, val)
-	self:SetVibR(valbase, val)
-end
--- ========
--- PAC BKL
-function Wwursa:GetBkl(dpath, revert, base)
-	self:GetBit(self.PAC_BKL, dpath, revert, base)
 end
 
-function Wwursa:SetBkl(valbase, val)
-	self:SendBit(self.PAC_BKL, valbase, val)
-end
--- ========
--- PAC LCDBKL
-function Wwursa:GetLcdBkl(dpath, revert, base)
-	self:GetBit(self.PAC_LCDBKL, dpath, revert, base)
-end
-
-function Wwursa:SetLcdBkl(valbase, val)
-	self:SendBit(self.PAC_LCDBKL, valbase, val)
-end
-
-function Wwursa:Setpac(valbase, val)
-	self:SetBkl(valbase, val)
-	self:SetLcdBkl(valbase, val)
-end
 return Wwursa
