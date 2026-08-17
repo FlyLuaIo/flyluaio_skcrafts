@@ -64,9 +64,10 @@ wwursa:CfgVal(32, "laminar/B738/flt_ctrls/flap_lever", 0.25, nil)
 wwursa:CfgVal(33, "laminar/B738/flt_ctrls/flap_lever", 0.125, nil)
 wwursa:CfgVal(34, "laminar/B738/flt_ctrls/flap_lever", 0, nil)
 
+wwursa:CfgVal(37, "laminar/B738/flt_ctrls/speedbrake_lever", 0, 0.0889)
+
 -------------------- Output ---------------------
 local dr_power = iDataRef:New('sim/cockpit/electrical/avionics_on')
-local dr_main = iDataRef:New('laminar/B738/electric/main_bus')
 local dr_panel = iDataRef:New('laminar/B738/electric/panel_brightness[3]')
 local dr_trim = iDataRef:New('sim/cockpit2/controls/rudder_trim')
 local dr_fire1 = iDataRef:New('laminar/B738/annunciator/engine1_fire')
@@ -79,8 +80,7 @@ local bkl_last = -1
 
 function wwursa_zibo_bkl_loop()
 	local hasPower = dr_power:Get() ~= 0
-	local hasMain = dr_main:Get() ~= 0
-	local ratio = hasMain and dr_panel:Get() or 0.5
+	local ratio = dr_panel:Get() or 0.5
 	if ratio < 0 then ratio = 0 elseif ratio > 1 then ratio = 1 end
 	local bkl = hasPower and math.floor(ratio * 255) or 0
 	if bkl ~= bkl_last then
@@ -121,17 +121,17 @@ end
 -- explicit SendLedCmd with local throttling (no per-frame USB HID traffic)
 local dr_onground = iDataRef:New('sim/flightmodel/failures/onground_any')
 local dr_gs = iDataRef:New('sim/flightmodel/position/groundspeed')
-local dr_l_tire = iDataRef:New('sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]')
-local dr_r_tire = iDataRef:New('sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]')
+local dr_l_tire = iDataRef:New('sim/flightmodel2/gear/tire_rotation_speed_rad_sec[1]')
+local dr_r_tire = iDataRef:New('sim/flightmodel2/gear/tire_rotation_speed_rad_sec[2]')
 local vib_l_last = 0
 local vib_r_last = 0
 
 function wwursa_zibo_vib_loop()
 	local vib_l, vib_r = 0, 0
 	if dr_onground:Get() ~= 0 then
-		local gs = dr_gs:Get() * 10
-		vib_l = math.floor(gs * dr_l_tire:Get())
-		vib_r = math.floor(gs * dr_r_tire:Get())
+		local gs = dr_gs:Get()
+		vib_l = math.floor(dr_l_tire:Get())
+		vib_r = math.floor(dr_r_tire:Get())
 		if vib_l > 255 then vib_l = 255 end
 		if vib_r > 255 then vib_r = 255 end
 	end
@@ -150,5 +150,5 @@ GlobalFrameLoopManager:add(function()
 	wwursa_zibo_led_loop()
 	wwursa_zibo_vib_loop()
 	-- setLcdText caches text internally; USB write only when text changes
-	wwursa:setLcdText(wwursa:formatTrimText(dr_trim:Get(), false))
+	wwursa:setLcdText(wwursa:formatTrimText(dr_trim:Get() * 17.5, false))
 end)
