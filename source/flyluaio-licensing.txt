@@ -33,12 +33,18 @@ Cmcr             - Copyright (c) 2017 vector-of-bool                   [MIT]
 nlohmann-json    - Copyright (c) 2013-2025 Niels Lohmann               [MIT]
 serial_cpp       - Copyright (c) 2012 William Woodall, John Harrison  [MIT]
                    (fork of wjwwood/serial; https://github.com/ami-iit/serial_cpp)
+imgui            - Copyright (c) 2014-2026 Omar Cornut              [MIT]
+
+## Packaging
+
+Qt Installer Framework - Copyright (c) 2015 The Qt Company Ltd.   [GPL-3.0]
+                         (https://doc.qt.io/qtinstallerframework/)
 
 -------------------------------------------------------------------------------
 ## MIT License
 
 Applies to: jsmn, LinkedList, LuaJIT (including Lua 5.1/5.2 code), spdlog,
-SQLiteCpp, efsw (and simplefilewatcher), Cmcr, nlohmann-json, serial_cpp,
+SQLiteCpp, efsw (and simplefilewatcher), Cmcr, nlohmann-json, serial_cpp, imgui,
 and uzlib portions originally from PuTTY (Simon Tatham et al.).
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -297,3 +303,9 @@ https://github.com/zeromq/libzmq
 LuaJIT includes a version (aka dlmalloc) of malloc/free/realloc written by
 Doug Lea and released to the public domain, as explained at
 https://creativecommons.org/licenses/publicdomain
+
+-------------------------------------------------------------------------------
+## GNU General Public License v3.0 (Packaging — Qt Installer Framework)
+
+https://www.gnu.org/licenses/gpl-3.0.html
+https://doc.qt.io/qtinstallerframework/
