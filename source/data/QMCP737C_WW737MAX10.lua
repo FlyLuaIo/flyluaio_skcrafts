@@ -11,9 +11,9 @@
 --此处调整加速点, 值越小,越容易进入加速模式,可根据自己的手感调节
 local FastTurnsPerSecond = 40 --How many spins per second  is considered FAST?
 --
-local MaxBightness = 25 --Max brightness set   /背光的最大亮度设定,调小些够用就好,环保省电不刺眼.
-local SetNav2same = 1 --set Nav2 Freq = NAV1   //设定Nav2和NAV2 相同,值为1有效
-local IsAlreadyInit = 0 --是否已经初始化过了，用来设定首次通电时要执行的内容
+local MaxBightness = 25       --Max brightness set   /背光的最大亮度设定,调小些够用就好,环保省电不刺眼.
+local SetNav2same = 1         --set Nav2 Freq = NAV1   //设定Nav2和NAV2 相同,值为1有效
+local IsAlreadyInit = 0       --是否已经初始化过了，用来设定首次通电时要执行的内容
 
 --
 --laminar/B738/electric/panel_brightness 面板背光，四个数组，浮点
@@ -144,6 +144,7 @@ end
 function digi_disp_powoff_leds()
     uluaSet(idr_qmcp737c_hid_leds, 0)
 end
+
 function digi_disp_powoff_mcp()
     uluaSet(idr_qmcp737c_hid_crs1mod, 0)
     uluaSet(idr_qmcp737c_hid_iasmod, 4)
@@ -163,6 +164,7 @@ function digi_disp_powoff_com()
     uluaSet(idr_qmcp737c_hid_vhfa, i)
     uluaSet(idr_qmcp737c_hid_vhfs, i)
 end
+
 function digi_disp_powoff_nav()
     uluaSet(idr_qmcp737c_hid_navamod, 0)
     uluaSet(idr_qmcp737c_hid_navsmod, 0)
@@ -253,7 +255,7 @@ local dr_zibo_at_arm_pos = uluaFind("laminar/B738/autopilot/autothrottle_arm_pos
 local dr_zibo_ap_disc_pos = uluaFind("laminar/B738/autopilot/disconnect_pos")
 local dr_lg = uluaFind("laminar/B738/switches/landing_gear")
 local dr_position_light = uluaFind("laminar/B738/toggle_switch/position_light_pos") --positon light
-local dr_autobreak_pose = uluaFind("laminar/B738/autobrake/autobrake_pos") -- auto break switch position rto is 0 max is 5
+local dr_autobreak_pose = uluaFind("laminar/B738/autobrake/autobrake_pos")          -- auto break switch position rto is 0 max is 5
 
 local dr_vhf_sen = uluaFind("laminar/B738/comm/rtp_L/hf_sens_ctrl/rheostat")
 --new fix dh display bug
@@ -261,7 +263,7 @@ local dr_vhf_sen = uluaFind("laminar/B738/comm/rtp_L/hf_sens_ctrl/rheostat")
 --*************************************************************************************
 
 ------------------ Spical Switchs  Process  -------------------------------
-local last_left_land = 0 --last landing light left state
+local last_left_land = 0  --last landing light left state
 local last_right_land = 0 --last landing light right state
 
 local zibo738_d_baro_hap = uluaFind("laminar/B738/EFIS_control/capt/baro_in_hpa")
@@ -284,11 +286,11 @@ local zibo738_cmd_autobrake_up = uluaFind("laminar/B738/knob/autobrake_up")
 --local org_vhf = d_coms
 -- local last_dh_pilot = dh_pilot
 local vhf_toggle_pressed = false
-local taxi_last_press
-local pos78_last_press
-local pos79_last_press
-local sbreak_last = 0
-local abrake_last = 0
+local ch_taxi = iChange:New(nil)
+local ch_pos78 = iChange:New(nil)
+local ch_pos79 = iChange:New(nil)
+local ch_sbreak = iChange:New(0)
+local ch_abrake = iChange:New(0)
 local abrake_turn = 0
 -- local vor1_last = 0
 -- local vor2_last = 0
@@ -336,45 +338,40 @@ function ZB738M_frame_update()
 
     --TAXI Switch
     local taxi = uluaGet(dr_taxi)
-    if qmcp737c_val_condbtn_72 ~= taxi_last_press then
+    if ch_taxi:ChangedUpdate(qmcp737c_val_condbtn_72) then
         if (qmcp737c_val_condbtn_72 == 1 and taxi == 0) or (qmcp737c_val_condbtn_72 == 0 and taxi > 0) then
             uluaCmdOnce(zibo738_cmd_taxi_toggle)
         end
-        taxi_last_press = qmcp737c_val_condbtn_72
     end
 
-    if qmcp737c_val_condbtn_101 ~= sbreak_last then
+    if ch_sbreak:ChangedUpdate(qmcp737c_val_condbtn_101) then
         if qmcp737c_val_condbtn_101 == 1 then
             uluaSet(dr_sbrake, 0.0889)
         elseif qmcp737c_val_condbtn_101 == 2 then
             uluaSet(dr_sbrake, 0.75)
         end
-        sbreak_last = qmcp737c_val_condbtn_101
     end
     --Position
     local position_light = uluaGet(dr_position_light)
-    if qmcp737c_val_condbtn_78 ~= pos78_last_press then
+    if ch_pos78:ChangedUpdate(qmcp737c_val_condbtn_78) then
         if qmcp737c_val_condbtn_78 == 1 and position_light == 0 then
             uluaCmdOnce(zibo738_cmd_pos_down)
         elseif qmcp737c_val_condbtn_78 == 0 and position_light == -1 then
             uluaCmdOnce(zibo738_cmd_pos_up)
         end
-        pos78_last_press = qmcp737c_val_condbtn_78
     end
 
-    if qmcp737c_val_condbtn_79 ~= pos79_last_press then
+    if ch_pos79:ChangedUpdate(qmcp737c_val_condbtn_79) then
         if qmcp737c_val_condbtn_79 == 1 and position_light == 0 then
             uluaCmdOnce(zibo738_cmd_pos_up)
         elseif qmcp737c_val_condbtn_79 == 0 and position_light == 1 then
             uluaCmdOnce(zibo738_cmd_pos_down)
         end
-        pos79_last_press = qmcp737c_val_condbtn_79
     end
     -- -- autobrake position
     local autobreak_pose = uluaGet(dr_autobreak_pose)
-    if qmcp737c_val_condbtn_85 ~= abrake_last then
+    if ch_abrake:ChangedUpdate(qmcp737c_val_condbtn_85) then
         abrake_turn = qmcp737c_val_condbtn_85 - autobreak_pose
-        abrake_last = qmcp737c_val_condbtn_85
     end
     if (abrake_turn < 0) then
         uluaCmdOnce(zibo738_cmd_autobrake_down)
@@ -387,7 +384,7 @@ function ZB738M_frame_update()
 end
 
 GlobalFrameLoopManager:add(ZB738M_frame_update)
-GlobalFrameLoopManager:add(ZB738M_digi_disp_every_frame)
+
 
 -------------------  Send Message Process  ------------------------------------
 -- LED Indicator light
@@ -445,6 +442,7 @@ function digi_disp_set_CRS1()
     uluaSet(idr_qmcp737c_hid_crs1, d_crs1)
     uluaSet(idr_qmcp737c_hid_crs1mod, 1)
 end
+
 --be carefull about:
 ----d_ias_A
 ----d_ias_8
@@ -545,6 +543,7 @@ function digi_disp_set_NAVS()
     uluaSet(idr_qmcp737c_hid_navs, uluaGet(dr_d_navs))
     uluaSet(idr_qmcp737c_hid_navsmod, 1)
 end
+
 --Backlight
 local light_test_last = 0
 local brightness = 0.8
@@ -609,17 +608,19 @@ function digi_disp_mcp_rr()
         digi_disp_mcp_func_table[digi_disp_rr_func_idx]()
     end
 end
+
 function digi_disp_com()
     for i = 1, 2 do
         if digi_disp_com_func_table[i]() then
-        --break
+            --break
         end
     end
 end
+
 function digi_disp_nav()
     for i = 1, 2 do
         if digi_disp_nav_func_table[i]() then
-        --break
+            --break
         end
     end
 end
@@ -654,3 +655,5 @@ function ZB738M_digi_disp_every_frame()
         digi_disp_powoff_nav()
     end
 end
+
+GlobalFrameLoopManager:add(ZB738M_digi_disp_every_frame)

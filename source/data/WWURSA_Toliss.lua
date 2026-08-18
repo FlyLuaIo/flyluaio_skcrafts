@@ -43,10 +43,10 @@ wwursa:CfgVal(38, 'sim/cockpit2/controls/speedbrake_ratio', -0.5, 0)
 -- ChangedUpdate edges (no per-frame USB HID traffic in steady state)
 wwursa:GetBkl('AirbusFBW/PanelBrightnessLevel', 255)
 wwursa:GetOverallBkl('sim/cockpit/electrical/avionics_on', 1)
-wwursa:GetFault1('AirbusFBW/OHPLightsATA70_Raw[10]')
-wwursa:GetFire1('AirbusFBW/OHPLightsATA70_Raw[11]')
-wwursa:GetFault2('AirbusFBW/OHPLightsATA70_Raw[12]')
-wwursa:GetFire2('AirbusFBW/OHPLightsATA70_Raw[13]')
+wwursa:GetFault1('AirbusFBW/OHPLightsATA70[10]')
+wwursa:GetFire1('AirbusFBW/OHPLightsATA70[11]')
+wwursa:GetFault2('AirbusFBW/OHPLightsATA70[12]')
+wwursa:GetFire2('AirbusFBW/OHPLightsATA70[13]')
 
 local dr_power = iDataRef:New('sim/cockpit/electrical/avionics_on')
 local dr_annun = iDataRef:New('AirbusFBW/AnnunMode')
@@ -57,7 +57,7 @@ local dr_trim = iDataRef:New('AirbusFBW/YawTrimPosition')
 -- so ground-roll micro-vibration runs as an explicit loop with local throttling
 local dr_onground = iDataRef:New('sim/flightmodel/failures/onground_any')
 local dr_gs = iDataRef:New('sim/flightmodel/position/groundspeed')
-local vib_last = 0
+local ch_vib = iChange:New(0)
 
 function Wwursa_Toliss_Vib_Loop()
 	local vib = 0
@@ -65,8 +65,7 @@ function Wwursa_Toliss_Vib_Loop()
 		vib = math.floor(dr_gs:Get())
 		if vib > 255 then vib = 255 end
 	end
-	if vib ~= vib_last then
-		vib_last = vib
+	if ch_vib:ChangedUpdate(vib) then
 		wwursa:SendLedCmd(wwursa.LEDS_VIBL, vib)
 		wwursa:SendLedCmd(wwursa.LEDS_VIBR, vib)
 	end

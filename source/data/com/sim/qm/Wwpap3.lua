@@ -9,8 +9,6 @@ function Wwpap3:init()
 	self.QmdevId = 0x3A3C0513
 	self.FastTurnsPerSecond = 5
 	if _G.ilua_hw_assigned_wwpap3 == nil then
-		self.PackageConter = 0
-		self.LcdText = nil
 		_G.ilua_hw_assigned_wwpap3 = 0
 		self.LEDS_BKL = 0
 		self.LEDS_LCDBKL = 1
@@ -56,8 +54,6 @@ function Wwpap3:init()
 			self.LEDS_MAFO,
 			self.LEDS_ATSOL
 		}
-		self._lcdInited = false
-		self._lastLcdPayload = nil
 	end
 end
 
@@ -95,12 +91,24 @@ function Wwpap3:Init(FastTurnsPerSecond)
 	_G.idr_wwpap3_hid_invalid = uluaFind('cpuwolf/flyluaio/WwPap3/invalid')
 	_G.idr_wwpap3_hid_fastkeypersec = uluaFind('cpuwolf/flyluaio/WwPap3/fastkeypersec')
 	uluaSet(_G.idr_wwpap3_hid_fastkeypersec, ftps)
-	self:sendDeviceConfig()
-	self:ensureLcdInit()
-	self:SetBkl(0, 0)
-	self:SetLcdBkl(0, 0)
-	self:SetLedBkl(0, 0)
-	self:clearMcpDisplay()
+	self.LcdText = nil
+	self._lastLcdPayload = nil
+	--self:sendDeviceConfig()
+
+	for i = 0, 3 do
+		self:ensureLcdInit()
+		self:SetBkl(0, 0)
+		self:SetLcdBkl(0, 0)
+		self:SetLedBkl(0, 0)
+		self:clearMcpDisplay()
+		self:setMcpDisplay({
+			displayEnabled = true,
+			displayTest = true,
+			showLabels = true,
+			showCourse = true,
+			speed = 100,
+		})
+	end
 	return true
 end
 
@@ -178,10 +186,10 @@ function Wwpap3:SetLcdBkl(valbase, val)
 	if val == nil then
 		if self.d_lcdbkl:ChangedUpdate() then
 			val = self.d_lcdbkl:GetOld() * self.d_lcdbkl_scale
-			self:SendLedCmd(self.LEDS_LCDBKL, val)
+			self:SendLedCmd(self.LEDS_LCDBKL, val ~= 0 and 180 or 0)
 		end
 	else
-		self:SendLedCmd(self.LEDS_LCDBKL, val)
+		self:SendLedCmd(self.LEDS_LCDBKL, val ~= 0 and 180 or 0)
 	end
 end
 
@@ -417,8 +425,7 @@ function Wwpap3:Next()
 end
 
 function Wwpap3:ensureLcdInit()
-	if self._lcdInited then return end
-	self._lcdInited = true
+	self.PackageConter = 0
 	uluaSet(_G.idr_wwpap3_hid_init_seqnum, self:Next())
 end
 
