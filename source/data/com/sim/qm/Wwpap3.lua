@@ -32,9 +32,6 @@ function Wwpap3:init()
 		self.LEDS_MAFO = 19
 		self.LEDS_ATSOL = 30
 		self.ledIds = {
-			self.LEDS_BKL,
-			self.LEDS_LCDBKL,
-			self.LEDS_LEDBKL,
 			self.LEDS_N1,
 			self.LEDS_SPEED,
 			self.LEDS_VNAV,
@@ -201,6 +198,7 @@ function Wwpap3:SetLcdBkl(valbase, val)
 	if val == nil then
 		if self.d_lcdbkl:ChangedUpdate() then
 			val = self.d_lcdbkl:GetOld() * self.d_lcdbkl_scale
+			val = val < 100 and 100 or val
 			self:SendLedCmd(self.LEDS_LCDBKL, val)
 		end
 	else
@@ -224,6 +222,12 @@ function Wwpap3:SetLedBkl(valbase, val)
 	else
 		self:SendLedCmd(self.LEDS_LEDBKL, val ~= 0 and 255 or 0)
 	end
+end
+
+function Wwpap3:FreshBkls()
+	self.d_bkl:Invalid(-1)
+	self.d_lcdbkl:Invalid(-1)
+	self.d_ledbkl:Invalid(-1)
 end
 
 -- ========
@@ -407,9 +411,6 @@ function Wwpap3:SetAtSol(valbase, val)
 end
 
 function Wwpap3:Setleds(valbase, val)
-	self:SetBkl(valbase, val)
-	self:SetLcdBkl(valbase, val)
-	self:SetLedBkl(valbase, val)
 	self:SetN1(valbase, val)
 	self:SetSpeed(valbase, val)
 	self:SetVnav(valbase, val)
