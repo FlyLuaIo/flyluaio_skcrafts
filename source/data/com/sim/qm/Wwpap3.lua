@@ -92,6 +92,8 @@ function Wwpap3:Init(FastTurnsPerSecond)
 	self.LcdText = nil
 	self._lastLcdPayload = nil
 	self:_runInitSequence(0)
+	-- lighting sensor
+	self.dr_axis = iDataRef:New('cpuwolf/flyluaio/WwPap3/axisesmap[0]')
 	return true
 end
 
@@ -220,11 +222,11 @@ function Wwpap3:SetLedBkl(valbase, val)
 	if val == nil then
 		if self.d_ledbkl:ChangedUpdate() then
 			val = self.d_ledbkl:GetOld() * self.d_ledbkl_scale
-			val = val ~= 0 and 255 or val
+			val = val < 100 and 100 or val
 			self:SendLedCmd(self.LEDS_LEDBKL, val)
 		end
 	else
-		val = val ~= 0 and 255 or val
+		val = val < 100 and 100
 		self:SendLedCmd(self.LEDS_LEDBKL, val)
 	end
 end
@@ -719,6 +721,14 @@ function Wwpap3:clearMcpDisplay()
 		digitA = false,
 		digitB = false,
 	})
+end
+
+function Wwpap3:scale16bits(x)
+	local oldMin, oldMax = 0, 4096
+	local newMin, newMax = 0, 1
+
+	-- Linear mapping formula
+	return (x - oldMin) * (newMax - newMin) / (oldMax - oldMin) + newMin
 end
 
 return Wwpap3
