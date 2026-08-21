@@ -98,7 +98,7 @@ end
 -- ========
 -- Non-blocking init sequence: clear -> test, repeated 4 times
 function Wwpap3:_runInitSequence(round)
-	if round >= 1 then return end
+	if round >= 2 then return end
 	self:sendDeviceConfig()
 	self:ensureLcdClear()
 	self:ensureLcdInit()
@@ -139,7 +139,10 @@ function Wwpap3:SendConfigParam(configType, deviceParam, configValue)
 end
 
 function Wwpap3:sendDeviceConfig()
-	self:SendConfigParam(0x01, 0x00, 0x00)
+	-- rubbish config frame
+	self:SendConfigParam(0x01, 0x00, 0xFF)
+	--rubbish lcd clear frame
+	uluaSet(_G.idr_wwpap3_hid_lcdclear_seqnum, 0xFF)
 	self:SendConfigParam(0x01, 0x01, 0x00)
 	self:SendConfigParam(0x01, 0x02, 0x00)
 	self:SendConfigParam(0x01, 0x03, 0x00)
@@ -152,7 +155,7 @@ function Wwpap3:sendDeviceConfig()
 end
 
 function Wwpap3:SendLedCmd(LedId, value)
-	local combinedValue = (value * 256) + LedId
+	local combinedValue = (math.floor(value) * 256) + LedId
 	uluaSet(_G.idr_wwpap3_hid_leds_ledcmd, combinedValue)
 end
 
@@ -217,10 +220,12 @@ function Wwpap3:SetLedBkl(valbase, val)
 	if val == nil then
 		if self.d_ledbkl:ChangedUpdate() then
 			val = self.d_ledbkl:GetOld() * self.d_ledbkl_scale
-			self:SendLedCmd(self.LEDS_LEDBKL, val ~= 0 and 255 or 0)
+			val = val ~= 0 and 255 or val
+			self:SendLedCmd(self.LEDS_LEDBKL, val)
 		end
 	else
-		self:SendLedCmd(self.LEDS_LEDBKL, val ~= 0 and 255 or 0)
+		val = val ~= 0 and 255 or val
+		self:SendLedCmd(self.LEDS_LEDBKL, val)
 	end
 end
 
@@ -447,14 +452,7 @@ end
 
 function Wwpap3:ensureLcdClear()
 	-- 发送 F0 02 ... 预清屏/唤醒帧，必须在 ensureLcdInit 之前调用
-	if not self._lcdclearSeq then
-		self._lcdclearSeq = 0
-	end
-	uluaSet(_G.idr_wwpap3_hid_lcdclear_seqnum, self._lcdclearSeq)
-	self._lcdclearSeq = self._lcdclearSeq + 1
-	if self._lcdclearSeq > 255 then
-		self._lcdclearSeq = 1
-	end
+	uluaSet(_G.idr_wwpap3_hid_lcdclear_seqnum, 0)
 end
 
 local function pap3_clamp(v, lo, hi)
@@ -590,12 +588,14 @@ function Wwpap3:setMcpDisplay(data)
 			if mach >= 1.0 then mach = mach / 100.0 end
 			mach = pap3_clamp(mach, 0.0, 0.9999)
 			if (data.machDigits or 2) >= 3 then
+				-- ".xxx"
 				local three = pap3_clamp(math.floor(mach * 1000.0 + 0.5), 0, 999)
 				pap3_drawDigit(PAP3_G0, p, 0x04, math.floor(three / 100) % 10)
 				pap3_drawDigit(PAP3_G0, p, 0x02, math.floor(three / 10) % 10)
 				pap3_drawDigit(PAP3_G0, p, 0x01, three % 10)
 				pap3_apply(p, 0x1E, 0x80, true)
 			else
+				-- "0.xx"
 				local two = pap3_clamp(math.floor(mach * 100.0 + 0.5), 0, 99)
 				pap3_drawDigit(PAP3_G0, p, 0x02, math.floor(two / 10) % 10)
 				pap3_drawDigit(PAP3_G0, p, 0x01, two % 10)
