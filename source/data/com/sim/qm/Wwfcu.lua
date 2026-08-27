@@ -1,4 +1,3 @@
-
 -- *****************************************************************
 -- Don't modify this file, unless you know what you are doing
 -- Most of the code are auto generated
@@ -24,9 +23,6 @@ function Wwfcu:init()
 		self.LEDS_APPR = 13
 		self.LEDS_EXPEDBKL = 30
 		self.ledIds = {
-			self.LEDS_BKL,
-			self.LEDS_SCRBKL,
-			self.LEDS_LEDBKL,
 			self.LEDS_LOC,
 			self.LEDS_AP1,
 			self.LEDS_AP2,
@@ -35,6 +31,27 @@ function Wwfcu:init()
 			self.LEDS_APPR,
 			self.LEDS_EXPEDBKL
 		}
+		self.LEDSR_BKL = 100
+		self.LEDSR_SCRBKL = 101
+		self.LEDSR_LEDBKL = 102
+		self.LEDSR_FD = 103
+		self.LEDSR_LS = 104
+		self.LEDSR_CSTR = 105
+		self.LEDSR_WPT = 106
+		self.LEDSR_VORD = 107
+		self.LEDSR_NDB = 108
+		self.LEDSR_ARPT = 109
+
+		self.LEDSL_BKL = 200
+		self.LEDSL_SCRBKL = 201
+		self.LEDSL_LEDBKL = 202
+		self.LEDSL_FD = 203
+		self.LEDSL_LS = 204
+		self.LEDSL_CSTR = 205
+		self.LEDSL_WPT = 206
+		self.LEDSL_VORD = 207
+		self.LEDSL_NDB = 208
+		self.LEDSL_ARPT = 209
 	end
 end
 
@@ -90,32 +107,71 @@ function Wwfcu:SendBit(idx, valbase, val)
 end
 
 -- ========
--- LEDS BKL
-function Wwfcu:GetBkl(dpath, revert, base)
-	self:GetBit(self.LEDS_BKL, dpath, revert, base)
+-- Backlight
+function Wwfcu:GetBkl(dpath, scale)
+	self.d_bkl_scale = scale == nil and 30 or scale
+	self.d_bkl = iDataRef:New(dpath)
 end
 
-function Wwfcu:SetBkl(valbase, val)
-	self:SendBit(self.LEDS_BKL, valbase, val)
+function Wwfcu:SetBkl(val)
+	if val == nil then
+		if self.d_bkl:ChangedUpdate() then
+			val = self.d_bkl:GetOld() * self.d_bkl_scale
+			self:SendLedCmd(self.LEDS_BKL, val)
+		end
+	else
+		self:SendLedCmd(self.LEDS_BKL, val)
+	end
 end
+
+function Wwfcu:FreshBkl()
+	self.d_bkl:Invalid(-1)
+end
+
 -- ========
--- LEDS SCRBKL
-function Wwfcu:GetScrBkl(dpath, revert, base)
-	self:GetBit(self.LEDS_SCRBKL, dpath, revert, base)
+-- Scr Backlight
+function Wwfcu:GetScrBkl(dpath, scale)
+	self.d_scrbkl_scale = scale == nil and 30 or scale
+	self.d_scrbkl = iDataRef:New(dpath)
 end
 
-function Wwfcu:SetScrBkl(valbase, val)
-	self:SendBit(self.LEDS_SCRBKL, valbase, val)
+function Wwfcu:SetScrBkl(val)
+	if val == nil then
+		if self.d_scrbkl:ChangedUpdate() then
+			val = self.d_scrbkl:GetOld() * self.d_scrbkl_scale
+			self:SendLedCmd(self.LEDS_SCRBKL, val)
+		end
+	else
+		self:SendLedCmd(self.LEDS_SCRBKL, val)
+	end
 end
+
+function Wwfcu:FreshScrBkl()
+	self.d_scrbkl:Invalid(-1)
+end
+
 -- ========
--- LEDS LEDBKL
-function Wwfcu:GetLedBkl(dpath, revert, base)
-	self:GetBit(self.LEDS_LEDBKL, dpath, revert, base)
+-- Led Backlight
+function Wwfcu:GetLedBkl(dpath, scale)
+	self.d_ledbkl_scale = scale == nil and 30 or scale
+	self.d_ledbkl = iDataRef:New(dpath)
 end
 
-function Wwfcu:SetLedBkl(valbase, val)
-	self:SendBit(self.LEDS_LEDBKL, valbase, val)
+function Wwfcu:SetLedBkl(val)
+	if val == nil then
+		if self.d_ledbkl:ChangedUpdate() then
+			val = self.d_ledbkl:GetOld() * self.d_ledbkl_scale
+			self:SendLedCmd(self.LEDS_LEDBKL, val)
+		end
+	else
+		self:SendLedCmd(self.LEDS_LEDBKL, val)
+	end
 end
+
+function Wwfcu:FreshLedBkl()
+	self.d_ledbkl:Invalid(-1)
+end
+
 -- ========
 -- LEDS LOC
 function Wwfcu:GetLoc(dpath, revert, base)
@@ -125,6 +181,7 @@ end
 function Wwfcu:SetLoc(valbase, val)
 	self:SendBit(self.LEDS_LOC, valbase, val)
 end
+
 -- ========
 -- LEDS AP1
 function Wwfcu:GetAp1(dpath, revert, base)
@@ -134,6 +191,7 @@ end
 function Wwfcu:SetAp1(valbase, val)
 	self:SendBit(self.LEDS_AP1, valbase, val)
 end
+
 -- ========
 -- LEDS AP2
 function Wwfcu:GetAp2(dpath, revert, base)
@@ -143,6 +201,7 @@ end
 function Wwfcu:SetAp2(valbase, val)
 	self:SendBit(self.LEDS_AP2, valbase, val)
 end
+
 -- ========
 -- LEDS ATHR
 function Wwfcu:GetAthr(dpath, revert, base)
@@ -152,6 +211,7 @@ end
 function Wwfcu:SetAthr(valbase, val)
 	self:SendBit(self.LEDS_ATHR, valbase, val)
 end
+
 -- ========
 -- LEDS EXPED
 function Wwfcu:GetExped(dpath, revert, base)
@@ -161,6 +221,7 @@ end
 function Wwfcu:SetExped(valbase, val)
 	self:SendBit(self.LEDS_EXPED, valbase, val)
 end
+
 -- ========
 -- LEDS APPR
 function Wwfcu:GetAppr(dpath, revert, base)
@@ -170,6 +231,7 @@ end
 function Wwfcu:SetAppr(valbase, val)
 	self:SendBit(self.LEDS_APPR, valbase, val)
 end
+
 -- ========
 -- LEDS EXPEDBKL
 function Wwfcu:GetExpedBkl(dpath, revert, base)
@@ -181,9 +243,6 @@ function Wwfcu:SetExpedBkl(valbase, val)
 end
 
 function Wwfcu:Setleds(valbase, val)
-	self:SetBkl(valbase, val)
-	self:SetScrBkl(valbase, val)
-	self:SetLedBkl(valbase, val)
 	self:SetLoc(valbase, val)
 	self:SetAp1(valbase, val)
 	self:SetAp2(valbase, val)
@@ -203,10 +262,25 @@ function Wwfcu:Next()
 end
 
 local FCU_SEG = {
-	['0']=0xFA,['1']=0x60,['2']=0xD6,['3']=0xF4,['4']=0x6C,
-	['5']=0xBC,['6']=0xBE,['7']=0xE0,['8']=0xFE,['9']=0xFC,
-	['A']=0xEE,['B']=0xFE,['C']=0x9A,['D']=0x76,['E']=0x9E,['F']=0x8E,
-	['-']=0x04,['#']=0x36,[' ']=0x00
+	['0'] = 0xFA,
+	['1'] = 0x60,
+	['2'] = 0xD6,
+	['3'] = 0xF4,
+	['4'] = 0x6C,
+	['5'] = 0xBC,
+	['6'] = 0xBE,
+	['7'] = 0xE0,
+	['8'] = 0xFE,
+	['9'] = 0xFC,
+	['A'] = 0xEE,
+	['B'] = 0xFE,
+	['C'] = 0x9A,
+	['D'] = 0x76,
+	['E'] = 0x9E,
+	['F'] = 0x8E,
+	['-'] = 0x04,
+	['#'] = 0x36,
+	[' '] = 0x00
 }
 
 local function fcu_fix_len(s, n)
