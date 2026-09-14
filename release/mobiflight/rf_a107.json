@@ -1,0 +1,559 @@
+{
+  "$schema": "./mobiflight-config.schema.json",
+  "ProductName": "RfA107",
+  "ModuleName": "Rowsfire A107 V3",
+  "ModuleSerial": "SN-58F-185",
+  "outputs": {
+    "ShiftRegister": {
+      "ShiftRegister 1": [
+        {
+          "Name": "IR1-1",
+          "Pin": 0
+        },
+        {
+          "Name": "ADIRS ON BAT",
+          "Pin": 1
+        },
+        {
+          "Name": "ENG1-FIRE-1",
+          "Pin": 2
+        },
+        {
+          "Name": "AUP-FIRE-LED",
+          "Pin": 3
+        },
+        {
+          "Name": "ENG2-FIRE-1",
+          "Pin": 4
+        },
+        {
+          "Name": "LDG FLAP3-2",
+          "Pin": 5
+        },
+        {
+          "Name": "RCDR GND CTL-2",
+          "Pin": 6
+        },
+        {
+          "Name": "OXYGEN CREW SUPPLY-2",
+          "Pin": 7
+        },
+        {
+          "Name": "PUMP-L-STBY-1",
+          "Pin": 8
+        },
+        {
+          "Name": "IR1-2",
+          "Pin": 9
+        },
+        {
+          "Name": "IR3-1",
+          "Pin": 10
+        },
+        {
+          "Name": "IR3-2",
+          "Pin": 11
+        },
+        {
+          "Name": "IR2-1",
+          "Pin": 12
+        },
+        {
+          "Name": "IR2-2",
+          "Pin": 13
+        },
+        {
+          "Name": "PUMP-L-MAIN-1",
+          "Pin": 14
+        },
+        {
+          "Name": "PUMP-L-MAIN-2",
+          "Pin": 15
+        },
+        {
+          "Name": "PUMP-R-MAIN-1",
+          "Pin": 16
+        },
+        {
+          "Name": "PUMP-L-STBY-2",
+          "Pin": 17
+        },
+        {
+          "Name": "PUMP-L-1",
+          "Pin": 18
+        },
+        {
+          "Name": "PUMP-L-2",
+          "Pin": 19
+        },
+        {
+          "Name": "PUMP-CENTER-TANK-1",
+          "Pin": 20
+        },
+        {
+          "Name": "PUMP-CENTER-TANK-2",
+          "Pin": 21
+        },
+        {
+          "Name": "PUMP-R-1",
+          "Pin": 22
+        },
+        {
+          "Name": "PUMP-R-2",
+          "Pin": 23
+        },
+        {
+          "Name": "EXTERNAL PWR-1",
+          "Pin": 24
+        },
+        {
+          "Name": "PUMP-R-MAIN-2",
+          "Pin": 25
+        },
+        {
+          "Name": "PUMP-R-STBY-1",
+          "Pin": 26
+        },
+        {
+          "Name": "PUMP-R-STBY-2",
+          "Pin": 27
+        },
+        {
+          "Name": "BAT1 OFF",
+          "Pin": 28
+        },
+        {
+          "Name": "BAT1-1",
+          "Pin": 29
+        },
+        {
+          "Name": "BAT2-2",
+          "Pin": 30
+        },
+        {
+          "Name": "BAT2-1",
+          "Pin": 31
+        }
+      ],
+      "ShiftRegister 2": [
+        {
+          "Name": "PACK2-1",
+          "Pin": 0
+        },
+        {
+          "Name": "EXTERNAL PWR-2",
+          "Pin": 1
+        },
+        {
+          "Name": "PROBE WINDOW HEAT-2",
+          "Pin": 3
+        },
+        {
+          "Name": "PACK1-1",
+          "Pin": 4
+        },
+        {
+          "Name": "PACK1-2",
+          "Pin": 5
+        },
+        {
+          "Name": "APU BLEED-1",
+          "Pin": 6
+        },
+        {
+          "Name": "APU BLEED-2",
+          "Pin": 7
+        },
+        {
+          "Name": "ANTI ICE ENG2-1",
+          "Pin": 8
+        },
+        {
+          "Name": "PACK2-2",
+          "Pin": 9
+        },
+        {
+          "Name": "APU MASTERSW-1",
+          "Pin": 10
+        },
+        {
+          "Name": "APU MASTERSW-2",
+          "Pin": 11
+        },
+        {
+          "Name": "ANTI ICE WING-1",
+          "Pin": 12
+        },
+        {
+          "Name": "ANTI ICE WING-2",
+          "Pin": 13
+        },
+        {
+          "Name": "ANTI ICE ENG1-1",
+          "Pin": 14
+        },
+        {
+          "Name": "ANTI ICE ENG1-2",
+          "Pin": 15
+        },
+        {
+          "Name": "ANTI ICE ENG2-2",
+          "Pin": 17
+        },
+        {
+          "Name": "APU START-1",
+          "Pin": 18
+        },
+        {
+          "Name": "APU START-2",
+          "Pin": 19
+        },
+        {
+          "Name": "EMER EXIT LT",
+          "Pin": 22
+        }
+      ]
+    },
+    "Output": {
+      "LED": [
+        {
+          "Name": "A107 BACKLIGHT"
+        }
+      ]
+    },
+    "Display Module": {
+      "LedModule": [
+        {
+          "Name": "BAT 1+2"
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "InputMultiplexer": {
+      "Multiplexer 2": [
+        {
+          "Name": "FIRE-APU",
+          "Pin": 0,
+          "MapToBit": 0
+        },
+        {
+          "Name": "FIRE-ENG1",
+          "Pin": 1,
+          "MapToBit": 1
+        },
+        {
+          "Name": "CALLS ALL",
+          "Pin": 2,
+          "MapToBit": 2
+        },
+        {
+          "Name": "FIRE TEST ENG2",
+          "Pin": 3,
+          "MapToBit": 3
+        },
+        {
+          "Name": "FIRE TEST APU",
+          "Pin": 4,
+          "MapToBit": 4
+        },
+        {
+          "Name": "FIRE TEST ENG1",
+          "Pin": 5,
+          "MapToBit": 5
+        },
+        {
+          "Name": "PUMPS-R STBY",
+          "Pin": 6,
+          "MapToBit": 6
+        },
+        {
+          "Name": "PUMPS-R MAIN",
+          "Pin": 7,
+          "MapToBit": 7
+        },
+        {
+          "Name": "PUMPS-R",
+          "Pin": 8,
+          "MapToBit": 8
+        },
+        {
+          "Name": "PUMP-CENTER TANK",
+          "Pin": 9,
+          "MapToBit": 9
+        },
+        {
+          "Name": "PUMPS-L",
+          "Pin": 10,
+          "MapToBit": 10
+        },
+        {
+          "Name": "PUMPS -L STBY",
+          "Pin": 11,
+          "MapToBit": 11
+        },
+        {
+          "Name": "PUMPS -L  MAIN",
+          "Pin": 12,
+          "MapToBit": 12
+        },
+        {
+          "Name": "EXT POWER",
+          "Pin": 13,
+          "MapToBit": 13
+        },
+        {
+          "Name": "BAT2",
+          "Pin": 14,
+          "MapToBit": 14
+        },
+        {
+          "Name": "BAT1",
+          "Pin": 15,
+          "MapToBit": 15
+        }
+      ],
+      "Multiplexer 3": [
+        {
+          "Name": "STROBE OFF/AUTO",
+          "Pin": 0,
+          "MapToBit": 16
+        },
+        {
+          "Name": "STROBE AUTO/ON",
+          "Pin": 1,
+          "MapToBit": 17
+        },
+        {
+          "Name": "BEACON",
+          "Pin": 2,
+          "MapToBit": 18
+        },
+        {
+          "Name": "WING",
+          "Pin": 3,
+          "MapToBit": 19
+        },
+        {
+          "Name": "NAV&LOGO OFF/1",
+          "Pin": 4,
+          "MapToBit": 20
+        },
+        {
+          "Name": "NAV&LOGO 1/2",
+          "Pin": 5,
+          "MapToBit": 21
+        },
+        {
+          "Name": "RWY TURN OFF ON",
+          "Pin": 6,
+          "MapToBit": 22
+        },
+        {
+          "Name": "LAND-L RTRCT/OFF",
+          "Pin": 7,
+          "MapToBit": 23
+        },
+        {
+          "Name": "LAND-L OFF/ON",
+          "Pin": 8,
+          "MapToBit": 24
+        },
+        {
+          "Name": "LAND-R RTRCT/OFF",
+          "Pin": 9,
+          "MapToBit": 25
+        },
+        {
+          "Name": "LAND-R OFF/ON",
+          "Pin": 10,
+          "MapToBit": 26
+        },
+        {
+          "Name": "NOSE TAXI/TO",
+          "Pin": 11,
+          "MapToBit": 27
+        },
+        {
+          "Name": "NOSE OFF/TAXI",
+          "Pin": 12,
+          "MapToBit": 28
+        },
+        {
+          "Name": "SEATBELTS ON",
+          "Pin": 13,
+          "MapToBit": 29
+        },
+        {
+          "Name": "NO SMOKING OFF/AUTO",
+          "Pin": 14,
+          "MapToBit": 30
+        },
+        {
+          "Name": "FIRE-ENG2",
+          "Pin": 15,
+          "MapToBit": 31
+        }
+      ],
+      "Multiplexer 1": [
+        {
+          "Name": "ICE ENG2",
+          "Pin": 0,
+          "MapToBit": 32
+        },
+        {
+          "Name": "ICE ENG1",
+          "Pin": 1,
+          "MapToBit": 33
+        },
+        {
+          "Name": "ICE WING",
+          "Pin": 2,
+          "MapToBit": 34
+        },
+        {
+          "Name": "APU START",
+          "Pin": 3,
+          "MapToBit": 35
+        },
+        {
+          "Name": "APU MASTERSW",
+          "Pin": 4,
+          "MapToBit": 36
+        },
+        {
+          "Name": "PACK2",
+          "Pin": 5,
+          "MapToBit": 37
+        },
+        {
+          "Name": "APU BLEED",
+          "Pin": 6,
+          "MapToBit": 38
+        },
+        {
+          "Name": "PACK1",
+          "Pin": 7,
+          "MapToBit": 39
+        },
+        {
+          "Name": "PROBE WINDOW HEAT",
+          "Pin": 8,
+          "MapToBit": 40
+        },
+        {
+          "Name": "CREW OXYGEN SUPPLY",
+          "Pin": 9,
+          "MapToBit": 41
+        },
+        {
+          "Name": "GROUND CTL",
+          "Pin": 10,
+          "MapToBit": 42
+        },
+        {
+          "Name": "IR3",
+          "Pin": 11,
+          "MapToBit": 43
+        },
+        {
+          "Name": "IR2",
+          "Pin": 12,
+          "MapToBit": 44
+        },
+        {
+          "Name": "IR1",
+          "Pin": 13,
+          "MapToBit": 45
+        },
+        {
+          "Name": "TERR",
+          "Pin": 14,
+          "MapToBit": 46
+        },
+        {
+          "Name": "LDGFLAP3",
+          "Pin": 15,
+          "MapToBit": 47
+        }
+      ],
+      "Multiplexer 4": [
+        {
+          "Name": "DOME LIGHT BRT",
+          "Pin": 0,
+          "MapToBit": 48
+        },
+        {
+          "Name": "DOME LIGHT DIM",
+          "Pin": 1,
+          "MapToBit": 49
+        },
+        {
+          "Name": "NO SMOKING AUTO/ON",
+          "Pin": 3,
+          "MapToBit": 50
+        },
+        {
+          "Name": "EMERGENCY EXIT OFF",
+          "Pin": 4,
+          "MapToBit": 51
+        },
+        {
+          "Name": "EMERGENCY EXIT ON",
+          "Pin": 5,
+          "MapToBit": 52
+        },
+        {
+          "Name": "ADIRS-1 OFF/NAV",
+          "Pin": 6,
+          "MapToBit": 53
+        },
+        {
+          "Name": "ADIRS-1 ATT",
+          "Pin": 7,
+          "MapToBit": 54
+        },
+        {
+          "Name": "ADIRS-3 OFF/NAV",
+          "Pin": 8,
+          "MapToBit": 55
+        },
+        {
+          "Name": "ADIRS-3 ATT",
+          "Pin": 9,
+          "MapToBit": 56
+        },
+        {
+          "Name": "ADIRS-2 OFF/NAV",
+          "Pin": 10,
+          "MapToBit": 57
+        },
+        {
+          "Name": "ADIRS-2 ATT",
+          "Pin": 11,
+          "MapToBit": 58
+        },
+        {
+          "Name": "AIR XBLEED CLOSE?AUTO",
+          "Pin": 12,
+          "MapToBit": 59
+        },
+        {
+          "Name": "AIR XBLEED AUTO/OPEN",
+          "Pin": 13,
+          "MapToBit": 60
+        },
+        {
+          "Name": "WIPER-FAST",
+          "Pin": 14,
+          "MapToBit": 61
+        },
+        {
+          "Name": "WIPER-OFF",
+          "Pin": 15,
+          "MapToBit": 62
+        }
+      ]
+    }
+  }
+}
