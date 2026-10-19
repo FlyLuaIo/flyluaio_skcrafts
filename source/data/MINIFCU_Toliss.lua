@@ -31,6 +31,11 @@ local dr_baro       = iDataRef:New("sim/cockpit/misc/barometer_setting")
 local dr_baro_unit  = iDataRef:New("AirbusFBW/BaroUnitCapt")
 local dr_baro_std   = iDataRef:New("AirbusFBW/BaroStdCapt")
 
+-- Cold and dark : FCU power (same source as xp/QFCU_Toliss.lua) — 0 = FCU unpowered
+local dr_fcu_avail  = iDataRef:New("AirbusFBW/FCUAvail")
+-- ANN LT test mode, same source as xp/QFCU_Toliss.lua: 0 = DIM, 1 = BRT, 2 = TEST
+local dr_annun_mode = iDataRef:New("AirbusFBW/AnnunMode")
+
 -- ===================== Baro encoder helper =====================
 local baro_cmd_down = uluaFind("sim/instruments/barometer_down")
 local baro_cmd_up   = uluaFind("sim/instruments/barometer_up")
@@ -229,7 +234,54 @@ minifcu:GetFcuLsValue('AirbusFBW/ILSonCapt')
 
 -- ===================== Frame Loop =====================
 
+-- Cold and dark: FCUAvail == 0 → blank both custom devices
+--   (kSetCustomDevice 32,<device index>,-1,0; = Connector MESSAGE_STOP).
+-- Source 0 means "off", so revert = true; Set*() without a value only writes on change.
+minifcu:GetFcuPower('AirbusFBW/FCUAvail', true)
+minifcu:GetEfisPower('AirbusFBW/FCUAvail', true)
+
 GlobalFrameLoopManager:add(function()
+	-- expert code: cold and dark + ANN LT test mode
+	minifcu:SetFcuPower()
+	minifcu:SetEfisPower()
+
+	-- 断电/上电：iDataRef 自带变化检测。ChangedUpdate 内部已 Get 过，
+	-- 取值一律用 GetOld 读缓存，不要再 Get 触发一次 dataref 读取。
+	local fcu_changed = dr_fcu_avail:ChangedUpdate()
+	local fcu_powered = dr_fcu_avail:GetOld() >= 1
+
+	if fcu_changed then
+		if not fcu_powered then
+			-- The six LEDs are GPIO pins, not part of a custom device: kSetCustomDevice
+			-- only blanks the LCDs, so switch them off here.
+			minifcu:AllLedsOff()
+		end
+		minifcu:FreshAll()
+	end
+
+	-- Test mode: QFCU 靠面板旋钮让硬件把段码/灯全点亮，Lua 只做亮度与重绘
+	-- (qfcu_fcu_test + 1)。miniFCU 没有亮度通道，段码自检只能用 pattern 逼近；
+	-- 退出 TEST 时作废缓存，下一帧重写真实值。
+	local annun_changed = dr_annun_mode:ChangedUpdate()
+	local annun_test = fcu_powered and dr_annun_mode:GetOld() == 2
+
+	if annun_changed then
+		if annun_test then
+			minifcu:TestPattern()
+		end
+		minifcu:FreshAll()
+	end
+
+	if not fcu_powered then
+		-- Display is blanked; forwarding values now would light it back up.
+		-- On power-up the plugin re-sends every field of both devices by itself.
+		return
+	end
+	if annun_test then
+		-- LEDs are held lit by the writes above, LCD keeps its last values.
+		return
+	end
+
 	local baro_unit = dr_baro_unit:Get()
 	local baro = dr_baro:Get()
 	-- Fix Captain Baro

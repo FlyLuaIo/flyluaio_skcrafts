@@ -54,6 +54,8 @@ function MiniFCU:absent(FastTurnsPerSecond)
 	_G.idr_minifcu_mf_custom_efis_baro_inhg_hpa_unit = uluaFind('cpuwolf/mf/MiniFCU/custom/1/9/value')
 	_G.idr_minifcu_mf_custom_efis_baro_inhg = uluaFind('cpuwolf/mf/MiniFCU/custom/1/10/value')
 	_G.idr_minifcu_mf_custom_efis_baro = uluaFind('cpuwolf/mf/MiniFCU/custom/1/11/value')
+	_G.idr_minifcu_mf_custom_fcu_power = uluaFind('cpuwolf/mf/MiniFCU/custom/0/power')
+	_G.idr_minifcu_mf_custom_efis_power = uluaFind('cpuwolf/mf/MiniFCU/custom/1/power')
 
 	uluaSet(_G.idr_minifcu_hid_fastkeypersec, FastTurnsPerSecond)
 
@@ -87,9 +89,8 @@ end
 
 function MiniFCU:SetAp1(val)
 	if val == nil then
-		val = self.d_ap1:GetBit() * 255
 		if self.d_ap1:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_output_ap1, val)
+			uluaSet(_G.idr_minifcu_mf_output_ap1, self.d_ap1:GetOldBit() * 255)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_output_ap1, val)
@@ -111,9 +112,8 @@ end
 
 function MiniFCU:SetAp2(val)
 	if val == nil then
-		val = self.d_ap2:GetBit() * 255
 		if self.d_ap2:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_output_ap2, val)
+			uluaSet(_G.idr_minifcu_mf_output_ap2, self.d_ap2:GetOldBit() * 255)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_output_ap2, val)
@@ -135,9 +135,8 @@ end
 
 function MiniFCU:SetAppr(val)
 	if val == nil then
-		val = self.d_appr:GetBit() * 255
 		if self.d_appr:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_output_appr, val)
+			uluaSet(_G.idr_minifcu_mf_output_appr, self.d_appr:GetOldBit() * 255)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_output_appr, val)
@@ -159,9 +158,8 @@ end
 
 function MiniFCU:SetAthr(val)
 	if val == nil then
-		val = self.d_athr:GetBit() * 255
 		if self.d_athr:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_output_athr, val)
+			uluaSet(_G.idr_minifcu_mf_output_athr, self.d_athr:GetOldBit() * 255)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_output_athr, val)
@@ -183,9 +181,8 @@ end
 
 function MiniFCU:SetExped(val)
 	if val == nil then
-		val = self.d_exped:GetBit() * 255
 		if self.d_exped:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_output_exped, val)
+			uluaSet(_G.idr_minifcu_mf_output_exped, self.d_exped:GetOldBit() * 255)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_output_exped, val)
@@ -207,9 +204,8 @@ end
 
 function MiniFCU:SetLoc(val)
 	if val == nil then
-		val = self.d_loc:GetBit() * 255
 		if self.d_loc:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_output_loc, val)
+			uluaSet(_G.idr_minifcu_mf_output_loc, self.d_loc:GetOldBit() * 255)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_output_loc, val)
@@ -230,9 +226,8 @@ end
 
 function MiniFCU:SetFcuSpdValue(val)
 	if val == nil then
-		val = self.d_fcu_spd_value:Get() * self.d_fcu_spd_value_scale
 		if self.d_fcu_spd_value:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_spd_value, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_spd_value, self.d_fcu_spd_value:GetOld() * self.d_fcu_spd_value_scale)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_spd_value, val)
@@ -253,9 +248,8 @@ end
 
 function MiniFCU:SetFcuMachValue(val)
 	if val == nil then
-		val = self.d_fcu_mach_value:Get() * self.d_fcu_mach_value_scale
 		if self.d_fcu_mach_value:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_mach_value, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_mach_value, self.d_fcu_mach_value:GetOld() * self.d_fcu_mach_value_scale)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_mach_value, val)
@@ -276,9 +270,8 @@ end
 
 function MiniFCU:SetFcuSpdMachMode(val)
 	if val == nil then
-		val = self.d_fcu_spd_mach_mode:Get() * self.d_fcu_spd_mach_mode_scale
 		if self.d_fcu_spd_mach_mode:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_spd_mach_mode, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_spd_mach_mode, self.d_fcu_spd_mach_mode:GetOld() * self.d_fcu_spd_mach_mode_scale)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_spd_mach_mode, val)
@@ -298,9 +291,8 @@ end
 
 function MiniFCU:SetFcuSpdDashes(val)
 	if val == nil then
-		val = self.d_fcu_spd_dashes:GetBit()
 		if self.d_fcu_spd_dashes:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_spd_dashes, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_spd_dashes, self.d_fcu_spd_dashes:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_spd_dashes, val)
@@ -320,9 +312,8 @@ end
 
 function MiniFCU:SetFcuSpdDot(val)
 	if val == nil then
-		val = self.d_fcu_spd_dot:GetBit()
 		if self.d_fcu_spd_dot:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_spd_dot, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_spd_dot, self.d_fcu_spd_dot:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_spd_dot, val)
@@ -343,9 +334,8 @@ end
 
 function MiniFCU:SetFcuHdgValue(val)
 	if val == nil then
-		val = self.d_fcu_hdg_value:Get() * self.d_fcu_hdg_value_scale
 		if self.d_fcu_hdg_value:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_hdg_value, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_hdg_value, self.d_fcu_hdg_value:GetOld() * self.d_fcu_hdg_value_scale)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_hdg_value, val)
@@ -365,9 +355,8 @@ end
 
 function MiniFCU:SetFcuHdgDashes(val)
 	if val == nil then
-		val = self.d_fcu_hdg_dashes:GetBit()
 		if self.d_fcu_hdg_dashes:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_hdg_dashes, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_hdg_dashes, self.d_fcu_hdg_dashes:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_hdg_dashes, val)
@@ -387,9 +376,8 @@ end
 
 function MiniFCU:SetFcuHdgDot(val)
 	if val == nil then
-		val = self.d_fcu_hdg_dot:GetBit()
 		if self.d_fcu_hdg_dot:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_hdg_dot, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_hdg_dot, self.d_fcu_hdg_dot:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_hdg_dot, val)
@@ -410,9 +398,8 @@ end
 
 function MiniFCU:SetFcuAltValue(val)
 	if val == nil then
-		val = self.d_fcu_alt_value:Get() * self.d_fcu_alt_value_scale
 		if self.d_fcu_alt_value:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_alt_value, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_alt_value, self.d_fcu_alt_value:GetOld() * self.d_fcu_alt_value_scale)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_alt_value, val)
@@ -432,9 +419,8 @@ end
 
 function MiniFCU:SetFcuAltDot(val)
 	if val == nil then
-		val = self.d_fcu_alt_dot:GetBit()
 		if self.d_fcu_alt_dot:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_alt_dot, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_alt_dot, self.d_fcu_alt_dot:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_alt_dot, val)
@@ -455,9 +441,8 @@ end
 
 function MiniFCU:SetFcuVsValue(val)
 	if val == nil then
-		val = self.d_fcu_vs_value:Get() * self.d_fcu_vs_value_scale
 		if self.d_fcu_vs_value:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_vs_value, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_vs_value, self.d_fcu_vs_value:GetOld() * self.d_fcu_vs_value_scale)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_vs_value, val)
@@ -478,9 +463,8 @@ end
 
 function MiniFCU:SetFcuFpaValue(val)
 	if val == nil then
-		val = self.d_fcu_fpa_value:Get() * self.d_fcu_fpa_value_scale
 		if self.d_fcu_fpa_value:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_fpa_value, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_fpa_value, self.d_fcu_fpa_value:GetOld() * self.d_fcu_fpa_value_scale)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_fpa_value, val)
@@ -500,9 +484,8 @@ end
 
 function MiniFCU:SetFcuVsDashes(val)
 	if val == nil then
-		val = self.d_fcu_vs_dashes:GetBit()
 		if self.d_fcu_vs_dashes:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_vs_dashes, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_vs_dashes, self.d_fcu_vs_dashes:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_vs_dashes, val)
@@ -522,9 +505,8 @@ end
 
 function MiniFCU:SetFcuHdgTrkMode(val)
 	if val == nil then
-		val = self.d_fcu_hdg_trk_mode:GetBit()
 		if self.d_fcu_hdg_trk_mode:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_hdg_trk_mode, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_hdg_trk_mode, self.d_fcu_hdg_trk_mode:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_hdg_trk_mode, val)
@@ -544,9 +526,8 @@ end
 
 function MiniFCU:SetEfisCstr(val)
 	if val == nil then
-		val = self.d_efis_cstr:GetBit()
 		if self.d_efis_cstr:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_efis_cstr, val)
+			uluaSet(_G.idr_minifcu_mf_custom_efis_cstr, self.d_efis_cstr:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_efis_cstr, val)
@@ -566,9 +547,8 @@ end
 
 function MiniFCU:SetEfisWpt(val)
 	if val == nil then
-		val = self.d_efis_wpt:GetBit()
 		if self.d_efis_wpt:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_efis_wpt, val)
+			uluaSet(_G.idr_minifcu_mf_custom_efis_wpt, self.d_efis_wpt:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_efis_wpt, val)
@@ -588,9 +568,8 @@ end
 
 function MiniFCU:SetEfisVord(val)
 	if val == nil then
-		val = self.d_efis_vord:GetBit()
 		if self.d_efis_vord:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_efis_vord, val)
+			uluaSet(_G.idr_minifcu_mf_custom_efis_vord, self.d_efis_vord:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_efis_vord, val)
@@ -610,9 +589,8 @@ end
 
 function MiniFCU:SetEfisNdb(val)
 	if val == nil then
-		val = self.d_efis_ndb:GetBit()
 		if self.d_efis_ndb:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_efis_ndb, val)
+			uluaSet(_G.idr_minifcu_mf_custom_efis_ndb, self.d_efis_ndb:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_efis_ndb, val)
@@ -632,9 +610,8 @@ end
 
 function MiniFCU:SetEfisArpt(val)
 	if val == nil then
-		val = self.d_efis_arpt:GetBit()
 		if self.d_efis_arpt:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_efis_arpt, val)
+			uluaSet(_G.idr_minifcu_mf_custom_efis_arpt, self.d_efis_arpt:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_efis_arpt, val)
@@ -654,9 +631,8 @@ end
 
 function MiniFCU:SetFcuFdValue(val)
 	if val == nil then
-		val = self.d_fcu_fd_value:GetBit()
 		if self.d_fcu_fd_value:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_fd_value, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_fd_value, self.d_fcu_fd_value:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_fd_value, val)
@@ -676,9 +652,8 @@ end
 
 function MiniFCU:SetFcuLsValue(val)
 	if val == nil then
-		val = self.d_fcu_ls_value:GetBit()
 		if self.d_fcu_ls_value:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_fcu_ls_value, val)
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_ls_value, self.d_fcu_ls_value:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_fcu_ls_value, val)
@@ -698,9 +673,8 @@ end
 
 function MiniFCU:SetEfisBaroQnnh1(val)
 	if val == nil then
-		val = self.d_efis_baro_qnnh_1:GetBit()
 		if self.d_efis_baro_qnnh_1:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_efis_baro_qnnh_1, val)
+			uluaSet(_G.idr_minifcu_mf_custom_efis_baro_qnnh_1, self.d_efis_baro_qnnh_1:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_efis_baro_qnnh_1, val)
@@ -720,9 +694,8 @@ end
 
 function MiniFCU:SetEfisBaroStd1(val)
 	if val == nil then
-		val = self.d_efis_baro_std_1:GetBit()
 		if self.d_efis_baro_std_1:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_efis_baro_std_1, val)
+			uluaSet(_G.idr_minifcu_mf_custom_efis_baro_std_1, self.d_efis_baro_std_1:GetOldBit())
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_efis_baro_std_1, val)
@@ -743,9 +716,8 @@ end
 
 function MiniFCU:SetEfisBaroInhgHpaUnit(val)
 	if val == nil then
-		val = self.d_efis_baro_inhg_hpa_unit:Get() * self.d_efis_baro_inhg_hpa_unit_scale
 		if self.d_efis_baro_inhg_hpa_unit:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_efis_baro_inhg_hpa_unit, val)
+			uluaSet(_G.idr_minifcu_mf_custom_efis_baro_inhg_hpa_unit, self.d_efis_baro_inhg_hpa_unit:GetOld() * self.d_efis_baro_inhg_hpa_unit_scale)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_efis_baro_inhg_hpa_unit, val)
@@ -766,9 +738,8 @@ end
 
 function MiniFCU:SetEfisBaroInhg(val)
 	if val == nil then
-		val = self.d_efis_baro_inhg:Get() * self.d_efis_baro_inhg_scale
 		if self.d_efis_baro_inhg:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_efis_baro_inhg, val)
+			uluaSet(_G.idr_minifcu_mf_custom_efis_baro_inhg, self.d_efis_baro_inhg:GetOld() * self.d_efis_baro_inhg_scale)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_efis_baro_inhg, val)
@@ -789,9 +760,8 @@ end
 
 function MiniFCU:SetEfisBaro(val)
 	if val == nil then
-		val = self.d_efis_baro:Get() * self.d_efis_baro_scale
 		if self.d_efis_baro:ChangedUpdate() then
-			uluaSet(_G.idr_minifcu_mf_custom_efis_baro, val)
+			uluaSet(_G.idr_minifcu_mf_custom_efis_baro, self.d_efis_baro:GetOld() * self.d_efis_baro_scale)
 		end
 	else
 		uluaSet(_G.idr_minifcu_mf_custom_efis_baro, val)
@@ -800,6 +770,113 @@ end
 
 function MiniFCU:FreshEfisBaro()
 	self.d_efis_baro:Invalid(-1)
+end
+
+-- ========
+-- power hooks (hand written, not generated): one blanking channel per custom device.
+-- 1 → kSetCustomDevice 32,<device index>,-1,0; (Connector MESSAGE_STOP: blank the
+-- display), 0 → every display field of that device is sent again.
+-- Get*(dpath, revert=true) for a "0 = usable" source (e.g. AirbusFBW/FCUAvail).
+
+function MiniFCU:GetFcuPower(dpath, revert, base)
+	self.d_fcu_power = iDataRef:New(dpath, nil, revert, base)
+end
+
+function MiniFCU:SetFcuPower(val)
+	if val == nil then
+		if self.d_fcu_power:ChangedUpdate() then
+			uluaSet(_G.idr_minifcu_mf_custom_fcu_power, self.d_fcu_power:GetOldBit())
+		end
+	else
+		uluaSet(_G.idr_minifcu_mf_custom_fcu_power, val)
+	end
+end
+
+function MiniFCU:GetEfisPower(dpath, revert, base)
+	self.d_efis_power = iDataRef:New(dpath, nil, revert, base)
+end
+
+-- ========
+-- panel-level actions (hand written, not generated): identical for every aircraft profile.
+-- Called from the profile's frame loop - cold&dark blanking, ANN LT self test, cache reset.
+
+-- six annunciator LEDs are GPIO output pins (0 = LOW, 255 = HIGH), not custom-device channels:
+-- MESSAGE_STOP only blanks the LCDs, so they have to be switched off here.
+function MiniFCU:AllLedsOff()
+	self:SetAp1(0)
+	self:SetAp2(0)
+	self:SetAthr(0)
+	self:SetLoc(0)
+	self:SetAppr(0)
+	self:SetExped(0)
+end
+
+-- Drop the value cache of every registered channel, so the next Set*() writes even when the
+-- value did not change: needed after MESSAGE_STOP (the device forgot everything) and when
+-- leaving the ANN LT test pattern. Driven by the object's own channel fields - a hard-coded
+-- name list here would silently miss channels added later.
+function MiniFCU:FreshAll()
+	for name, dr in pairs(self) do
+		if type(name) == 'string' and name:sub(1, 2) == 'd_' and name:sub(-6) ~= '_scale' then
+			if dr ~= nil and dr.Invalid then
+				dr:Invalid(-1)
+			end
+		end
+	end
+end
+
+-- ANN LT test pattern. On a real FCU the panel switch lights every lamp and every digit
+-- segment; miniFCU has no brightness / segment-self-test channel, so approximate it:
+-- every LED on, every display showing 8s.
+-- Hard limit: MT8 (ALT) is an integer ft/100 channel -> 888 shows "88800", 88888 is impossible.
+function MiniFCU:TestPattern()
+	self:SetAp1(255)
+	self:SetAp2(255)
+	self:SetAthr(255)
+	self:SetLoc(255)
+	self:SetAppr(255)
+	self:SetExped(255)
+
+	-- EFIS push-button lamps (miniEFIS custom device, 1 = ON)
+	self:SetEfisCstr(1)
+	self:SetEfisWpt(1)
+	self:SetEfisVord(1)
+	self:SetEfisNdb(1)
+	self:SetEfisArpt(1)
+	self:SetFcuFdValue(1)
+	self:SetFcuLsValue(1)
+
+	-- SPD/MACH and VS/FPA are mutually exclusive fields: test shows SPD + VS
+	self:SetFcuSpdMachMode(0)
+	self:SetFcuSpdValue(888)
+	self:SetFcuSpdDashes(0)
+	self:SetFcuSpdDot(1)
+	self:SetFcuHdgValue(888)
+	self:SetFcuHdgDashes(0)
+	self:SetFcuHdgDot(1)
+	self:SetFcuAltValue(888)
+	self:SetFcuAltDot(1)
+	self:SetFcuVsValue(8800)
+	self:SetFcuFpaValue(0)
+	self:SetFcuVsDashes(0)
+	self:SetFcuHdgTrkMode(0)
+
+	-- baro: QNH label on, STD off (STD would replace the digits with "STD"), hPa mode
+	self:SetEfisBaroInhgHpaUnit(0)
+	self:SetEfisBaroStd1(0)
+	self:SetEfisBaroQnnh1(1)
+	self:SetEfisBaro(8888)
+	self:SetEfisBaroInhg(8888)
+end
+
+function MiniFCU:SetEfisPower(val)
+	if val == nil then
+		if self.d_efis_power:ChangedUpdate() then
+			uluaSet(_G.idr_minifcu_mf_custom_efis_power, self.d_efis_power:GetOldBit())
+		end
+	else
+		uluaSet(_G.idr_minifcu_mf_custom_efis_power, val)
+	end
 end
 
 return MiniFCU
