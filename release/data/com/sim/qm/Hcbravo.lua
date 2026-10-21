@@ -1,0 +1,457 @@
+
+-- *****************************************************************
+-- Don't modify this file, Most of the code is auto generated
+-- created by Wei Shuai <cpuwolf@gmail.com> 2026-03-25_12_44_33UTC
+-- *****************************************************************
+
+local Hcbravo = oop.class(com.sim.Qmdev)
+function Hcbravo:init()
+    self.QmdevId = 0xE2F65B0
+	self.FastTurnsPerSecond = 5
+	if _G.ilua_hw_assigned_hcbravo == nil then
+		_G.ilua_hw_assigned_hcbravo = 0
+	end
+end
+
+function Hcbravo:absent(FastTurnsPerSecond)
+	if not uluaFind('cpuwolf/flyluaio/HCBravo/LED/int') then
+		return true
+	end
+	_G.idr_hcbravo_hid_led_int = uluaFind('cpuwolf/flyluaio/HCBravo/LED/int')
+	_G.idr_hcbravo_hid_led_ap_hdg = uluaFind('cpuwolf/flyluaio/HCBravo/LED/AP_hdg')
+	_G.idr_hcbravo_hid_led_ap_nav = uluaFind('cpuwolf/flyluaio/HCBravo/LED/AP_nav')
+	_G.idr_hcbravo_hid_led_ap_apr = uluaFind('cpuwolf/flyluaio/HCBravo/LED/AP_apr')
+	_G.idr_hcbravo_hid_led_ap_rev = uluaFind('cpuwolf/flyluaio/HCBravo/LED/AP_rev')
+	_G.idr_hcbravo_hid_led_ap_alt = uluaFind('cpuwolf/flyluaio/HCBravo/LED/AP_alt')
+	_G.idr_hcbravo_hid_led_ap_vs = uluaFind('cpuwolf/flyluaio/HCBravo/LED/AP_vs')
+	_G.idr_hcbravo_hid_led_ap_ias = uluaFind('cpuwolf/flyluaio/HCBravo/LED/AP_ias')
+	_G.idr_hcbravo_hid_led_ap_autopilot = uluaFind('cpuwolf/flyluaio/HCBravo/LED/AP_autopilot')
+	_G.idr_hcbravo_hid_led_gear_leftgreen = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Gear_LeftGreen')
+	_G.idr_hcbravo_hid_led_gear_leftred = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Gear_LeftRed')
+	_G.idr_hcbravo_hid_led_gear_centergreen = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Gear_CenterGreen')
+	_G.idr_hcbravo_hid_led_gear_centerred = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Gear_CenterRed')
+	_G.idr_hcbravo_hid_led_gear_rightgreen = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Gear_RightGreen')
+	_G.idr_hcbravo_hid_led_gear_rightred = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Gear_RightRed')
+	_G.idr_hcbravo_hid_led_light_masterwarn = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Light_MasterWarn')
+	_G.idr_hcbravo_hid_led_light_enginefire = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Light_EngineFire')
+	_G.idr_hcbravo_hid_led_light_lowoil = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Light_LowOil')
+	_G.idr_hcbravo_hid_led_light_lowfuel = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Light_LowFuel')
+	_G.idr_hcbravo_hid_led_light_antiice = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Light_Antiice')
+	_G.idr_hcbravo_hid_led_light_starter = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Light_Starter')
+	_G.idr_hcbravo_hid_led_light_apu = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Light_APU')
+	_G.idr_hcbravo_hid_led_light_mastercaution = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Light_MasterCaution')
+	_G.idr_hcbravo_hid_led_light_vacuum = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Light_Vacuum')
+	_G.idr_hcbravo_hid_led_light_lowhydpressure = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Light_LowHydPressURE')
+	_G.idr_hcbravo_hid_led_lights_auxfuelpump = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Lights_AuxFuelPump')
+	_G.idr_hcbravo_hid_led_lights_parkingbrake = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Lights_ParkingBrake')
+	_G.idr_hcbravo_hid_led_lights_lowvolts = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Lights_LowVolts')
+	_G.idr_hcbravo_hid_led_lights_door = uluaFind('cpuwolf/flyluaio/HCBravo/LED/Lights_door')
+	_G.idr_hcbravo_hid_invalid = uluaFind('cpuwolf/flyluaio/HCBravo/invalid')
+	_G.idr_hcbravo_hid_fastkeypersec = uluaFind('cpuwolf/flyluaio/HCBravo/fastkeypersec')
+	uluaSet(idr_hcbravo_hid_fastkeypersec, FastTurnsPerSecond)
+	return false
+end
+
+function Hcbravo:Init(FastTurnsPerSecond)
+	local ftps = FastTurnsPerSecond == nil and self.FastTurnsPerSecond or FastTurnsPerSecond
+	if self:absent(ftps) then
+		return false
+	end
+	if _G.ilua_hw_assigned_hcbravo == 1 then
+		return false
+	end
+	_G.ilua_hw_assigned_hcbravo = 1
+	return true
+end
+
+function Hcbravo.Open(...)
+	return com.sim.Qmdev.Open(Hcbravo, ...)
+end
+
+-- ========
+-- LED AP_hdg
+
+function Hcbravo:GetHdg(dpath, revert, base)
+	self:GetBit(1, dpath, revert, base)
+end
+
+function Hcbravo:SetHdg(valbase, val)
+	self:SetBit(1, _G.idr_hcbravo_hid_led_ap_hdg, valbase, val)
+end
+
+-- ========
+-- LED AP_nav
+
+function Hcbravo:GetNav(dpath, revert, base)
+	self:GetBit(2, dpath, revert, base)
+end
+
+function Hcbravo:SetNav(valbase, val)
+	self:SetBit(2, _G.idr_hcbravo_hid_led_ap_nav, valbase, val)
+end
+
+-- ========
+-- LED AP_apr
+
+function Hcbravo:GetApr(dpath, revert, base)
+	self:GetBit(3, dpath, revert, base)
+end
+
+function Hcbravo:SetApr(valbase, val)
+	self:SetBit(3, _G.idr_hcbravo_hid_led_ap_apr, valbase, val)
+end
+
+-- ========
+-- LED AP_rev
+
+function Hcbravo:GetRev(dpath, revert, base)
+	self:GetBit(4, dpath, revert, base)
+end
+
+function Hcbravo:SetRev(valbase, val)
+	self:SetBit(4, _G.idr_hcbravo_hid_led_ap_rev, valbase, val)
+end
+
+-- ========
+-- LED AP_alt
+
+function Hcbravo:GetAlt(dpath, revert, base)
+	self:GetBit(5, dpath, revert, base)
+end
+
+function Hcbravo:SetAlt(valbase, val)
+	self:SetBit(5, _G.idr_hcbravo_hid_led_ap_alt, valbase, val)
+end
+
+-- ========
+-- LED AP_vs
+
+function Hcbravo:GetVs(dpath, revert, base)
+	self:GetBit(6, dpath, revert, base)
+end
+
+function Hcbravo:SetVs(valbase, val)
+	self:SetBit(6, _G.idr_hcbravo_hid_led_ap_vs, valbase, val)
+end
+
+-- ========
+-- LED AP_ias
+
+function Hcbravo:GetIas(dpath, revert, base)
+	self:GetBit(7, dpath, revert, base)
+end
+
+function Hcbravo:SetIas(valbase, val)
+	self:SetBit(7, _G.idr_hcbravo_hid_led_ap_ias, valbase, val)
+end
+
+-- ========
+-- LED AP_autopilot
+
+function Hcbravo:GetAutopilot(dpath, revert, base)
+	self:GetBit(8, dpath, revert, base)
+end
+
+function Hcbravo:SetAutopilot(valbase, val)
+	self:SetBit(8, _G.idr_hcbravo_hid_led_ap_autopilot, valbase, val)
+end
+
+-- ========
+-- LED Gear_LeftGreen
+
+function Hcbravo:GetLeftgreen(dpath, revert, base)
+	self:GetBit(9, dpath, revert, base)
+end
+
+function Hcbravo:SetLeftgreen(valbase, val)
+	self:SetBit(9, _G.idr_hcbravo_hid_led_gear_leftgreen, valbase, val)
+end
+
+-- ========
+-- LED Gear_LeftRed
+
+function Hcbravo:GetLeftred(dpath, revert, base)
+	self:GetBit(10, dpath, revert, base)
+end
+
+function Hcbravo:SetLeftred(valbase, val)
+	self:SetBit(10, _G.idr_hcbravo_hid_led_gear_leftred, valbase, val)
+end
+
+-- ========
+-- LED Gear_CenterGreen
+
+function Hcbravo:GetCentergreen(dpath, revert, base)
+	self:GetBit(11, dpath, revert, base)
+end
+
+function Hcbravo:SetCentergreen(valbase, val)
+	self:SetBit(11, _G.idr_hcbravo_hid_led_gear_centergreen, valbase, val)
+end
+
+-- ========
+-- LED Gear_CenterRed
+
+function Hcbravo:GetCenterred(dpath, revert, base)
+	self:GetBit(12, dpath, revert, base)
+end
+
+function Hcbravo:SetCenterred(valbase, val)
+	self:SetBit(12, _G.idr_hcbravo_hid_led_gear_centerred, valbase, val)
+end
+
+-- ========
+-- LED Gear_RightGreen
+
+function Hcbravo:GetRightgreen(dpath, revert, base)
+	self:GetBit(13, dpath, revert, base)
+end
+
+function Hcbravo:SetRightgreen(valbase, val)
+	self:SetBit(13, _G.idr_hcbravo_hid_led_gear_rightgreen, valbase, val)
+end
+
+-- ========
+-- LED Gear_RightRed
+
+function Hcbravo:GetRightred(dpath, revert, base)
+	self:GetBit(14, dpath, revert, base)
+end
+
+function Hcbravo:SetRightred(valbase, val)
+	self:SetBit(14, _G.idr_hcbravo_hid_led_gear_rightred, valbase, val)
+end
+
+-- ========
+-- LED Light_MasterWarn
+
+function Hcbravo:GetMasterwarn(dpath, revert, base)
+	self:GetBit(15, dpath, revert, base)
+end
+
+function Hcbravo:SetMasterwarn(valbase, val)
+	self:SetBit(15, _G.idr_hcbravo_hid_led_light_masterwarn, valbase, val)
+end
+
+-- ========
+-- LED Light_EngineFire
+
+function Hcbravo:GetEnginefire(dpath, revert, base)
+	self:GetBit(16, dpath, revert, base)
+end
+
+function Hcbravo:SetEnginefire(valbase, val)
+	self:SetBit(16, _G.idr_hcbravo_hid_led_light_enginefire, valbase, val)
+end
+
+-- ========
+-- LED Light_LowOil
+
+function Hcbravo:GetLowoil(dpath, revert, base)
+	self:GetBit(17, dpath, revert, base)
+end
+
+function Hcbravo:SetLowoil(valbase, val)
+	self:SetBit(17, _G.idr_hcbravo_hid_led_light_lowoil, valbase, val)
+end
+
+-- ========
+-- LED Light_LowFuel
+
+function Hcbravo:GetLowfuel(dpath, revert, base)
+	self:GetBit(18, dpath, revert, base)
+end
+
+function Hcbravo:SetLowfuel(valbase, val)
+	self:SetBit(18, _G.idr_hcbravo_hid_led_light_lowfuel, valbase, val)
+end
+
+-- ========
+-- LED Light_Antiice
+
+function Hcbravo:GetAntiice(dpath, revert, base)
+	self:GetBit(19, dpath, revert, base)
+end
+
+function Hcbravo:SetAntiice(valbase, val)
+	self:SetBit(19, _G.idr_hcbravo_hid_led_light_antiice, valbase, val)
+end
+
+-- ========
+-- LED Light_Starter
+
+function Hcbravo:GetStarter(dpath, revert, base)
+	self:GetBit(20, dpath, revert, base)
+end
+
+function Hcbravo:SetStarter(valbase, val)
+	self:SetBit(20, _G.idr_hcbravo_hid_led_light_starter, valbase, val)
+end
+
+-- ========
+-- LED Light_APU
+
+function Hcbravo:GetApu(dpath, revert, base)
+	self:GetBit(21, dpath, revert, base)
+end
+
+function Hcbravo:SetApu(valbase, val)
+	self:SetBit(21, _G.idr_hcbravo_hid_led_light_apu, valbase, val)
+end
+
+-- ========
+-- LED Light_MasterCaution
+
+function Hcbravo:GetMastercaution(dpath, revert, base)
+	self:GetBit(22, dpath, revert, base)
+end
+
+function Hcbravo:SetMastercaution(valbase, val)
+	self:SetBit(22, _G.idr_hcbravo_hid_led_light_mastercaution, valbase, val)
+end
+
+-- ========
+-- LED Light_Vacuum
+
+function Hcbravo:GetVacuum(dpath, revert, base)
+	self:GetBit(23, dpath, revert, base)
+end
+
+function Hcbravo:SetVacuum(valbase, val)
+	self:SetBit(23, _G.idr_hcbravo_hid_led_light_vacuum, valbase, val)
+end
+
+-- ========
+-- LED Light_LowHydPressURE
+
+function Hcbravo:GetLowhydpressure(dpath, revert, base)
+	self:GetBit(24, dpath, revert, base)
+end
+
+function Hcbravo:SetLowhydpressure(valbase, val)
+	self:SetBit(24, _G.idr_hcbravo_hid_led_light_lowhydpressure, valbase, val)
+end
+
+-- ========
+-- LED Lights_AuxFuelPump
+
+function Hcbravo:GetAuxfuelpump(dpath, revert, base)
+	self:GetBit(25, dpath, revert, base)
+end
+
+function Hcbravo:SetAuxfuelpump(valbase, val)
+	self:SetBit(25, _G.idr_hcbravo_hid_led_lights_auxfuelpump, valbase, val)
+end
+
+-- ========
+-- LED Lights_ParkingBrake
+
+function Hcbravo:GetParkingbrake(dpath, revert, base)
+	self:GetBit(26, dpath, revert, base)
+end
+
+function Hcbravo:SetParkingbrake(valbase, val)
+	self:SetBit(26, _G.idr_hcbravo_hid_led_lights_parkingbrake, valbase, val)
+end
+
+-- ========
+-- LED Lights_LowVolts
+
+function Hcbravo:GetLowvolts(dpath, revert, base)
+	self:GetBit(27, dpath, revert, base)
+end
+
+function Hcbravo:SetLowvolts(valbase, val)
+	self:SetBit(27, _G.idr_hcbravo_hid_led_lights_lowvolts, valbase, val)
+end
+
+-- ========
+-- LED Lights_door
+
+function Hcbravo:GetDoor(dpath, revert, base)
+	self:GetBit(28, dpath, revert, base)
+end
+
+function Hcbravo:SetDoor(valbase, val)
+	self:SetBit(28, _G.idr_hcbravo_hid_led_lights_door, valbase, val)
+end
+
+function Hcbravo:SetLed(valbase, val)
+	self:SetHdg(valbase, val)
+	self:SetNav(valbase, val)
+	self:SetApr(valbase, val)
+	self:SetRev(valbase, val)
+	self:SetAlt(valbase, val)
+	self:SetVs(valbase, val)
+	self:SetIas(valbase, val)
+	self:SetAutopilot(valbase, val)
+	self:SetLeftgreen(valbase, val)
+	self:SetLeftred(valbase, val)
+	self:SetCentergreen(valbase, val)
+	self:SetCenterred(valbase, val)
+	self:SetRightgreen(valbase, val)
+	self:SetRightred(valbase, val)
+	self:SetMasterwarn(valbase, val)
+	self:SetEnginefire(valbase, val)
+	self:SetLowoil(valbase, val)
+	self:SetLowfuel(valbase, val)
+	self:SetAntiice(valbase, val)
+	self:SetStarter(valbase, val)
+	self:SetApu(valbase, val)
+	self:SetMastercaution(valbase, val)
+	self:SetVacuum(valbase, val)
+	self:SetLowhydpressure(valbase, val)
+	self:SetAuxfuelpump(valbase, val)
+	self:SetParkingbrake(valbase, val)
+	self:SetLowvolts(valbase, val)
+	self:SetDoor(valbase, val)
+end
+
+--[[
+hcbravo:GetHdg('')
+hcbravo:GetNav('')
+hcbravo:GetApr('')
+hcbravo:GetRev('')
+hcbravo:GetAlt('')
+hcbravo:GetVs('')
+hcbravo:GetIas('')
+hcbravo:GetAutopilot('')
+hcbravo:GetLeftgreen('')
+hcbravo:GetLeftred('')
+hcbravo:GetCentergreen('')
+hcbravo:GetCenterred('')
+hcbravo:GetRightgreen('')
+hcbravo:GetRightred('')
+hcbravo:GetMasterwarn('')
+hcbravo:GetEnginefire('')
+hcbravo:GetLowoil('')
+hcbravo:GetLowfuel('')
+hcbravo:GetAntiice('')
+hcbravo:GetStarter('')
+hcbravo:GetApu('')
+hcbravo:GetMastercaution('')
+hcbravo:GetVacuum('')
+hcbravo:GetLowhydpressure('')
+hcbravo:GetAuxfuelpump('')
+hcbravo:GetParkingbrake('')
+hcbravo:GetLowvolts('')
+hcbravo:GetDoor('')
+]]--
+
+function Hcbravo:MapAxis()
+	self.dr_axis = {}
+	self.dr_axis[1] = iDataRef:New('cpuwolf/flyluaio/HCBravo/axisesmap[0]')
+	self.dr_axis[2] = iDataRef:New('cpuwolf/flyluaio/HCBravo/axisesmap[4]')
+	self.dr_axis[3] = iDataRef:New('cpuwolf/flyluaio/HCBravo/axisesmap[3]')
+	self.dr_axis[4] = iDataRef:New('cpuwolf/flyluaio/HCBravo/axisesmap[2]')
+end
+
+function Hcbravo:LoopAxis(idx)
+	if self.dr_axis[idx]:ChangedUpdate() then
+		local axis = self:scaleValue(self.dr_axis[idx]:GetOld())
+		--uluaLog(string.format("hc axis %d", axis))
+		uluaWriteCmd(tostring(axis) .. ' (>K:THROTTLE' .. tostring(idx) .. '_AXIS_SET_EX1)')
+	end
+end
+
+return Hcbravo
