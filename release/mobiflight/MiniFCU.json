@@ -1,0 +1,562 @@
+{
+  "$schema": "./mobiflight-config.schema.json",
+  "ProductName": "MiniFCU",
+  "ModuleName": "miniCOCKPIT miniFCU",
+  "ModuleSerial": "SN-3GC-D38",
+  "outputs": {
+    "Output": {
+      "AP1": [
+        {
+          "Name": "AP1",
+          "Pin": "AP1"
+        }
+      ],
+      "AP2": [
+        {
+          "Name": "AP2",
+          "Pin": "AP2"
+        }
+      ],
+      "APPR": [
+        {
+          "Name": "APPR",
+          "Pin": "APPR"
+        }
+      ],
+      "ATHR": [
+        {
+          "Name": "ATHR",
+          "Pin": "ATHR"
+        }
+      ],
+      "EXPED": [
+        {
+          "Name": "EXPED",
+          "Pin": "EXPED"
+        }
+      ],
+      "LOC": [
+        {
+          "Name": "LOC",
+          "Pin": "LOC"
+        }
+      ]
+    },
+    "CustomDevice": {
+      "miniFCU LCD": [
+        {
+          "Name": "FCU - SPD - VALUE",
+          "MessageType": 0
+        },
+        {
+          "Name": "FCU - MACH - VALUE",
+          "MessageType": 1
+        },
+        {
+          "Name": "FCU - SPD/MACH - MODE",
+          "MessageType": 2
+        },
+        {
+          "Name": "FCU - SPD - DASHES",
+          "MessageType": 3
+        },
+        {
+          "Name": "FCU - SPD - DOT",
+          "MessageType": 4
+        },
+        {
+          "Name": "FCU - HDG - VALUE",
+          "MessageType": 5
+        },
+        {
+          "Name": "FCU - HDG - DASHES",
+          "MessageType": 6
+        },
+        {
+          "Name": "FCU - HDG - DOT",
+          "MessageType": 7
+        },
+        {
+          "Name": "FCU - ALT - VALUE",
+          "MessageType": 8
+        },
+        {
+          "Name": "FCU - ALT - DOT",
+          "MessageType": 9
+        },
+        {
+          "Name": "FCU - VS - VALUE",
+          "MessageType": 10
+        },
+        {
+          "Name": "FCU - FPA VALUE",
+          "MessageType": 11
+        },
+        {
+          "Name": "FCU - VS - DASHES",
+          "MessageType": 12
+        },
+        {
+          "Name": "FCU - HDG/TRK MODE",
+          "MessageType": 13
+        },
+        {
+          "Name": "FCU - POWER",
+          "MessageType": -1
+        }
+      ],
+      "miniEFIS LED and LCD": [
+        {
+          "Name": "EFIS - CSTR",
+          "MessageType": 0
+        },
+        {
+          "Name": "EFIS - WPT",
+          "MessageType": 1
+        },
+        {
+          "Name": "EFIS - VORD",
+          "MessageType": 2
+        },
+        {
+          "Name": "EFIS - NDB",
+          "MessageType": 3
+        },
+        {
+          "Name": "EFIS - ARPT",
+          "MessageType": 4
+        },
+        {
+          "Name": "FCU - FD VALUE",
+          "MessageType": 5
+        },
+        {
+          "Name": "FCU - LS VALUE",
+          "MessageType": 6
+        },
+        {
+          "Name": "EFIS - BARO QNNH = 1",
+          "MessageType": 7
+        },
+        {
+          "Name": "EFIS - BARO STD = 1",
+          "MessageType": 8
+        },
+        {
+          "Name": "EFIS - BARO INHG/HPA - UNIT",
+          "MessageType": 9
+        },
+        {
+          "Name": "EFIS - BARO INHG",
+          "MessageType": 10
+        },
+        {
+          "Name": "EFIS - BARO",
+          "MessageType": 11
+        },
+        {
+          "Name": "EFIS - POWER",
+          "MessageType": -1
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "Button": {
+      "MACH Button": [
+        {
+          "Name": "FCU - SPD/MACH",
+          "Pin": 0,
+          "MapToBit": 0
+        }
+      ],
+      "TRK Button": [
+        {
+          "Name": "FCU - HDG/TRK",
+          "Pin": 0,
+          "MapToBit": 1
+        }
+      ],
+      "AP1 Button": [
+        {
+          "Name": "FCU - AP1 - BUTTON",
+          "Pin": 0,
+          "MapToBit": 2
+        }
+      ],
+      "AP2 Button": [
+        {
+          "Name": "FCU - AP 2 - BUTTON",
+          "Pin": 0,
+          "MapToBit": 3
+        }
+      ],
+      "METRIC Button": [
+        {
+          "Name": "FCU - METRIC ALT Button",
+          "Pin": 0,
+          "MapToBit": 4
+        }
+      ],
+      "ATHR Button": [
+        {
+          "Name": "FCU - ATHR - BUTTON",
+          "Pin": 0,
+          "MapToBit": 5
+        }
+      ],
+      "EXPED Button": [
+        {
+          "Name": "FCU - EXPED - BUTTON",
+          "Pin": 0,
+          "MapToBit": 6
+        }
+      ],
+      "LOC Button": [
+        {
+          "Name": "FCU - LOC - BUTTON",
+          "Pin": 0,
+          "MapToBit": 7
+        }
+      ],
+      "APPR Button": [
+        {
+          "Name": "FCU - APPR - BUTTON",
+          "Pin": 0,
+          "MapToBit": 8
+        }
+      ],
+      "SPD PUSH": [
+        {
+          "Name": "FCU - SPD - PUSH",
+          "Pin": 0,
+          "MapToBit": 9
+        }
+      ],
+      "SPD PULL": [
+        {
+          "Name": "FCU - SPD - PULL",
+          "Pin": 0,
+          "MapToBit": 10
+        }
+      ],
+      "HDG PUSH": [
+        {
+          "Name": "FCU - HDG - PUSH",
+          "Pin": 0,
+          "MapToBit": 11
+        }
+      ],
+      "HDG PULL": [
+        {
+          "Name": "FCU - HDG - PULL",
+          "Pin": 0,
+          "MapToBit": 12
+        }
+      ],
+      "ALT PUSH": [
+        {
+          "Name": "FCU - ALT - PUSH",
+          "Pin": 0,
+          "MapToBit": 13
+        }
+      ],
+      "ALT PULL": [
+        {
+          "Name": "FCU - ALT - PULL",
+          "Pin": 0,
+          "MapToBit": 14
+        }
+      ],
+      "VS PUSH": [
+        {
+          "Name": "FCU - VS - PUSH",
+          "Pin": 0,
+          "MapToBit": 15
+        }
+      ],
+      "VS PULL": [
+        {
+          "Name": "FCU - VS - PULL",
+          "Pin": 0,
+          "MapToBit": 16
+        }
+      ],
+      "ALTINC": [
+        {
+          "Name": "FCU - ALT 100/1000",
+          "Pin": 0,
+          "MapToBit": 17
+        }
+      ],
+      "EFIS-CSTR": [
+        {
+          "Name": "EFIS - CSTR",
+          "Pin": 0,
+          "MapToBit": 18
+        }
+      ],
+      "EFIS-WPT": [
+        {
+          "Name": "EFIS - WPT",
+          "Pin": 0,
+          "MapToBit": 19
+        }
+      ],
+      "EFIS-VORD": [
+        {
+          "Name": "EFIS - VORD",
+          "Pin": 0,
+          "MapToBit": 20
+        }
+      ],
+      "EFIS-NDB": [
+        {
+          "Name": "EFIS - NDB",
+          "Pin": 0,
+          "MapToBit": 21
+        }
+      ],
+      "EFIS-ARPT": [
+        {
+          "Name": "EFIS - ARPT",
+          "Pin": 0,
+          "MapToBit": 22
+        }
+      ],
+      "EFIS-FD": [
+        {
+          "Name": "EFIS - FD",
+          "Pin": 0,
+          "MapToBit": 23
+        }
+      ],
+      "EFIS-LS": [
+        {
+          "Name": "EFIS - LS",
+          "Pin": 0,
+          "MapToBit": 24
+        }
+      ],
+      "EFIS-CHRONO": [
+        {
+          "Name": "EFIS - CHRONO",
+          "Pin": 0,
+          "MapToBit": 25
+        }
+      ],
+      "EFIS-ROSE_LS": [
+        {
+          "Name": "EFIS - ROSE LS",
+          "Pin": 0,
+          "MapToBit": 26
+        }
+      ],
+      "EFIS-ROSE_VOR": [
+        {
+          "Name": "EFIS - ROSE VOR",
+          "Pin": 0,
+          "MapToBit": 27
+        }
+      ],
+      "EFIS-ROSE_NAV": [
+        {
+          "Name": "EFIS - ROSE NAV",
+          "Pin": 0,
+          "MapToBit": 28
+        }
+      ],
+      "EFIS-ROSE_ARC": [
+        {
+          "Name": "EFIS - ROSE ARC",
+          "Pin": 0,
+          "MapToBit": 29
+        }
+      ],
+      "EFIS-ROSE_PLAN": [
+        {
+          "Name": "EFIS - ROSE PLAN",
+          "Pin": 0,
+          "MapToBit": 30
+        }
+      ],
+      "EFIS-RANGE_10": [
+        {
+          "Name": "EFIS - RANGE 10",
+          "Pin": 0,
+          "MapToBit": 31
+        }
+      ],
+      "EFIS-RANGE_20": [
+        {
+          "Name": "EFIS - RANGE 20",
+          "Pin": 0,
+          "MapToBit": 32
+        }
+      ],
+      "EFIS-RANGE_40": [
+        {
+          "Name": "EFIS - RANGE 40",
+          "Pin": 0,
+          "MapToBit": 33
+        }
+      ],
+      "EFIS-RANGE_80": [
+        {
+          "Name": "EFIS - RANGE 80",
+          "Pin": 0,
+          "MapToBit": 34
+        }
+      ],
+      "EFIS-RANGE_160": [
+        {
+          "Name": "EFIS - RANGE 160",
+          "Pin": 0,
+          "MapToBit": 35
+        }
+      ],
+      "EFIS-RANGE_320": [
+        {
+          "Name": "EFIS - RANGE 320",
+          "Pin": 0,
+          "MapToBit": 36
+        }
+      ],
+      "EFIS-1_ADF": [
+        {
+          "Name": "EFIS - ADF 1",
+          "Pin": 0,
+          "MapToBit": 37
+        }
+      ],
+      "EFIS-1_NULL": [
+        {
+          "Name": "EFIS - OFF 1",
+          "Pin": 0,
+          "MapToBit": 38
+        }
+      ],
+      "EFIS-1_VOR": [
+        {
+          "Name": "EFIS - VOR 1",
+          "Pin": 0,
+          "MapToBit": 39
+        }
+      ],
+      "EFIS-2_ADF": [
+        {
+          "Name": "EFIS - ADF 2",
+          "Pin": 0,
+          "MapToBit": 40
+        }
+      ],
+      "EFIS-2_NULL": [
+        {
+          "Name": "EFIS - OFF 2",
+          "Pin": 0,
+          "MapToBit": 41
+        }
+      ],
+      "EFIS-2_VOR": [
+        {
+          "Name": "EFIS - VOR 2",
+          "Pin": 0,
+          "MapToBit": 42
+        }
+      ],
+      "EFIS-hPa": [
+        {
+          "Name": "EFIS - BARO UNIT HPA",
+          "Pin": 0,
+          "MapToBit": 43
+        }
+      ],
+      "EFIS-inHg": [
+        {
+          "Name": "EFIS - BARO UNIT INHG",
+          "Pin": 0,
+          "MapToBit": 44
+        }
+      ],
+      "EFIS-PULL": [
+        {
+          "Name": "EFIS - BARO PULL",
+          "Pin": 0,
+          "MapToBit": 45
+        }
+      ],
+      "EFIS-PUSH": [
+        {
+          "Name": "EFIS - BARO PUSH",
+          "Pin": 0,
+          "MapToBit": 46,
+          "RevertPressRelease": true
+        }
+      ],
+      "EFIS-ROSE_HIDDEN": [
+        {
+          "Name": "EFIS - ROSE HIDDEN",
+          "Pin": 0,
+          "MapToBit": 67
+        }
+      ]
+    },
+    "Encoder": {
+      "ALT Encoder": [
+        {
+          "Name": "FCU - ALT - ENCODER",
+          "MapToBits": [
+            47,
+            48,
+            49,
+            50
+          ]
+        }
+      ],
+      "SPD Encoder": [
+        {
+          "Name": "FCU - SPD - ENCODER",
+          "MapToBits": [
+            51,
+            52,
+            53,
+            54
+          ]
+        }
+      ],
+      "HDG Encoder": [
+        {
+          "Name": "FCU - HDG - ENCODER",
+          "MapToBits": [
+            55,
+            56,
+            57,
+            58
+          ]
+        }
+      ],
+      "VS Encoder": [
+        {
+          "Name": "FCU - VS - ENCODER",
+          "MapToBits": [
+            59,
+            60,
+            61,
+            62
+          ]
+        }
+      ],
+      "EFIS-BARO Encoder": [
+        {
+          "Name": "EFIS - BAR ENCODER HPA",
+          "MapToBits": [
+            63,
+            64,
+            65,
+            66
+          ]
+        }
+      ]
+    }
+  }
+}
